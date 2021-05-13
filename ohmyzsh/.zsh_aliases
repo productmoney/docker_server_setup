@@ -1,0 +1,118 @@
+KERNEL_NAME="$(uname -s)"
+if [[ $KERNEL_NAME =~ ^"Darwin" ]]; then
+  export OSX="true"
+else
+  export OSX="false"
+fi
+#### MAIN ALIASES ####
+
+# ** Rsync copy preserve-Attribs, Recursive, w/ Progress
+alias cpsync='rsync -WarP'
+alias copy='rsync -WarP'
+
+# *** list startup services - No Mac Support. launchctrl. pffff.
+if [ -f "$(which chkconfig 2>/dev/null)" ]; then
+  alias service-list="chkconfig --list | grep '3:on'"
+  alias services-all="chkconfig --list | grep '3:on'"
+fi
+if [[ $OSX == "true" ]]; then
+  alias service-list="echo 'Haha, good luck with launchctl'"
+  alias services-all="echo 'Haha, good luck with launchctl'"
+else
+  alias service-list="service --status-all"
+  alias services-all="service --status-all"
+fi
+
+# ** monitor logs
+alias loga='sudo tail -500f /var/log/auth.log'
+alias logs='sudo tail -500f /var/log/syslog'
+alias logm='sudo tail -500f /var/log/messages'
+
+# ** List all IP addresses (see netspy & netlisteners helpers below)
+alias ips="ifconfig | grep 'inet ' | grep -v 127.0.0.1 | cut -d\t -f2 | sed 's/[^0-9\.]*//g'"
+if [[ "$OSX" == "true" ]]; then
+  # *** See port status
+  alias ports-all='lsof -Pn -i4'
+  alias ports-open='lsof -Pn -i4 | grep LISTEN'
+  alias ports-active='lsof -Pn -i4 | grep ESTABLISHED'
+else
+  # *** See port status
+  alias ports-all='netstat -pawnt'
+  alias ports-open='netstat -pawnt | grep LISTEN'
+  alias ports-active='netstat -pawnt | grep ESTABLISHED'
+fi
+
+# ** List paths
+alias paths='echo -e ${PATH//:/\\n}'
+alias paths-sorted='echo -e ${PATH//:/\\n} | sort'
+alias paths-deduped='echo -e ${PATH//:/\\n} | uniq'
+alias paths-summary='echo -e ${PATH//:/\\n} | sort | uniq'
+# *** Find all files matched in any path folder
+alias pathsfinder='which -a $1'
+
+# *** Extend gnu cmds
+alias ll='ls -lach'
+alias la='ls -A'
+alias l='ls -C'
+alias lsbig='ls -lachS'
+alias lss='lsbig'
+alias lsnew='ls -lacht'
+alias lt='lsnew'
+
+# *** Disk space use in human terms
+alias df='df -h'
+alias du='du -h -c'
+alias du1='du -d 1 -h -c' # Sums 1 folder deep
+alias du2='du -d 2 -h -c' # Sums 2 folder deep
+alias du3='du -d 3 -h -c' # Sums 3 folder deep
+# Only include same filesystem
+alias dud='du -d 1 -h -c -x'
+alias dud1='du -d 1 -h -c -x' # Sums 1 folder deep, same fs
+alias dud2='du -d 2 -h -c -x' # Sums 2 folder deep, same fs
+alias dud3='du -d 3 -h -c -x' # Sums 3 folder deep, same fs
+
+# Old Misc Polyfills
+alias cls='clear'
+
+#>>>> Recovered from http://alias.sh
+#List top ten largest files/directories in current directory
+alias ducks='du -cks *|sort -rn|head -11'
+alias dskload="ps faux|awk '\$8 ~ /D/{print}'"
+#Find a String in the Entire Git History
+alias findgit='git rev-list --all | xargs git grep -F'
+#history-search
+alias hs='history | grep --color=auto'
+alias hsx='history | egrep --color=auto'
+alias netlisteners='lsof -i -P | grep LISTEN'
+#identify and search for active network connections
+alias netspy='lsof -i -P +c 0 +M | grep -i "$1"'
+# remove leading & trailing spaces
+alias trim="awk '{\$1=\$1};1'"
+
+# Statz
+alias statz='inxi -Fz'
+
+alias sudo='sudo'
+alias dk='f() { docker-compose };f'
+alias dkb='f() { [ -e "./gdocker.py" ] && ./gdocker.py;docker-compose down --remove-orphans && docker-compose up --build --remove-orphans };f'
+alias dku='f() { [ -e "./gdocker.py" ] && ./gdocker.py;docker-compose down --remove-orphans && docker-compose up --remove-orphans };f'
+alias dkrm='f() { docker-compose stop && docker-compose rm && docker-compose up --build --force-recreate --remove-orphans --always-recreate-deps };f'
+alias dkit='f() { docker exec -it "$1" /bin/zsh };f'
+
+alias allo_update_venv='f() { deactivate;deactivate;source venv/bin/activate;pip install --upgrade pip; pip install --upgrade -r packages/allomorph_requirements.txt };f'
+alias allo_req_update_venv='f() { deactivate;deactivate;source venv/bin/activate;pip install --upgrade pip; pip install --upgrade -r packages/requirements.txt };f'
+
+alias gcpm='f() { git clone git@github.com:productmoney/"$1".git };f'
+alias gcpush='f() { git c "$1";git push };f'
+
+alias rkgr='f() { grep -rn "$1" -e "$2" };f'
+
+alias sau='f() { sudo apt-get update && sudo apt-get upgrade };f'
+alias sai='f() { sudo apt-get install $1 };f'
+
+
+alias dkillall='f() { docker kill $(docker ps -q) };f'
+alias dkrmall='f() { docker rm $(docker ps -a -q) };f'
+alias dkrmiall='f() { docker rmi $(docker images -q) };f'
+
+alias remove-old-snaps='f() { sudo snap list --all | while read snapname ver rev trk pub notes; do if [[ $notes = *disabled* ]]; then sudo snap remove "$snapname" --revision="$rev"; fi; done };f'
