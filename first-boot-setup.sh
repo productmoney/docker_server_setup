@@ -15,20 +15,16 @@ echo "----------"
 echo "Please enter your desired user name"
 read -r DESIRED_USERNAME
 
-useradd "$DESIRED_USERNAME"
-echo "$DESIRED_USERNAME":"$randompw" | chpasswd
+adduser -m -p "$randompw" -s /bin/bash "$DESIRED_USERNAME"
 echo "Added $DESIRED_USERNAME with the randomized password:"
 echo "$randompw"
 
 adduser "$DESIRED_USERNAME" sudo
 
-echo "Please enter your desired user name"
-read -r DESIRED_USERNAME
-
 #echo ""
 #echo "----------"
-#echo "Please enter your desired user name"
-#read -r DESIRED_USERNAME
+#echo "Please enter your desired hosts name"
+#read -r HNAME
 #
 #sudo hostnamectl set-hostname $HNAME
 #sudo nano /etc/hosts
@@ -36,3 +32,5 @@ read -r DESIRED_USERNAME
 echo ""
 echo "----------"
 echo "Done, please re-login as user account now."
+
+exit 1
