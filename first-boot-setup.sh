@@ -15,7 +15,8 @@ echo "----------"
 echo "Please enter your desired user name"
 read -r DESIRED_USERNAME
 
-useradd -m -p "$randompw" -s /bin/bash "$DESIRED_USERNAME"
+useradd -m -p -s /bin/bash "$DESIRED_USERNAME"
+echo "$DESIRED_USERNAME":"$randompw" | chpasswd
 echo "Added $DESIRED_USERNAME with the randomized password:"
 echo "$randompw"
 
