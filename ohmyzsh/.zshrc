@@ -1,7 +1,7 @@
 fpath+=~/.zfunc
 
 SAVEHIST=10000
-HISTFILE=/root/.zsh_history
+HISTFILE=$HOME/.zsh_history
 
 export ZSH_DISABLE_COMPFIX=true
 
