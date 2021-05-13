@@ -1,6 +1,7 @@
 #!/bin/bash
 
 export DEBIAN_FRONTEND=noninteractive
+DEBIAN_FRONTEND=noninteractive
 
 # Uncomment out the following line to remove old docker stuff
 #sudo apt-get remove docker docker-engine docker.io containerd runc
