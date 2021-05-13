@@ -1,3 +1,5 @@
+#!/bin/bash
+
 export DEBIAN_FRONTEND=noninteractive
 
 apt-get update
@@ -24,16 +26,12 @@ echo "$randompw"
 
 adduser "$DESIRED_USERNAME" sudo
 
-#echo ""
-#echo "----------"
-#echo "Please enter your desired hosts name"
-#read -r HNAME
-#
-#sudo hostnamectl set-hostname $HNAME
-#sudo nano /etc/hosts
+echo ""
+echo "----------"
+echo "Increasing sudo timeout duration"
+echo "sed -i 's/env_reset/env_reset,timestamp_timeout=90/' /etc/sudoers"
+sed -i 's/env_reset/env_reset,timestamp_timeout=90/' "/etc/sudoers"
 
 echo ""
 echo "----------"
 echo "Done, please re-login as user account now."
-
-exit 1
