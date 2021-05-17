@@ -91,6 +91,6 @@ source $ZSH/oh-my-zsh.sh
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 
-if [[ -e "/root/.zsh_aliases" ]]; then
-  . "/root/.zsh_aliases"
+if [[ -e "$HOME/.zsh_aliases" ]]; then
+  . "$HOME/.zsh_aliases"
 fi
