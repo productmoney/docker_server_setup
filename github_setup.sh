@@ -38,45 +38,45 @@ cat > ~/.gitconfig << EOL
 [user]
 	email = $GITHUB_EMAIL
 [core]
-        mergeoptions = --no-commit
+  mergeoptions = --no-commit
 [alias]
-        pff = pull --ff-only
-        quick = log -1 --format='%h - %an - %ad - %s' --date=local --name-status
-        squash = merge --squash
-        blog = log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr)%Creset' --abbrev-commit --date=relative
-        bdiff = show --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr)%Creset' --abbrev-commit --name-only --date=relative origin/master..HEAD
-        files = git show --pretty=\"format:\" --name-only
-        hist = show --pretty=\"format:\" --name-only
-        ci = commit
-        co = checkout
-        st = status
-        mom = !git fetch && git merge origin/master
-        rom = !git fetch && git reset --hard origin/master
-        pom = push origin master
-        ammend = commit --amend -C HEAD
-        ll = log --stat --abbrev-commit
-        pob = !git fetch && git merge origin/$1 && git push
-        z = reset --soft HEAD^
-        c = !git add . --all && git commit -m
+  pff = pull --ff-only
+  quick = log -1 --format='%h - %an - %ad - %s' --date=local --name-status
+  squash = merge --squash
+  blog = log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr)%Creset' --abbrev-commit --date=relative
+  bdiff = show --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr)%Creset' --abbrev-commit --name-only --date=relative origin/master..HEAD
+  files = git show --pretty=\"format:\" --name-only
+  hist = show --pretty=\"format:\" --name-only
+  ci = commit
+  co = checkout
+  st = status
+  mom = !git fetch && git merge origin/master
+  rom = !git fetch && git reset --hard origin/master
+  pom = push origin master
+  ammend = commit --amend -C HEAD
+  ll = log --stat --abbrev-commit
+  pob = !git fetch && git merge origin/$1 && git push
+  z = reset --soft HEAD^
+  c = !git add . --all && git commit -m
 [merge]
-        commit = no
+  commit = no
 [color]
-        branch = auto
-        diff = auto
-        status = auto
+  branch = auto
+  diff = auto
+  status = auto
 [color "branch"]
-        current = yellow reverse
-        local = yellow
-        remote = green
+  current = yellow reverse
+  local = yellow
+  remote = green
 [color "diff"]
-        meta = yellow bold
-        frag = magenta bold
-        old = red bold
-        new = green bold
+  meta = yellow bold
+  frag = magenta bold
+  old = red bold
+  new = green bold
 [color "status"]
-        added = yellow
-        changed = green
-        untracked = cyan
+  added = yellow
+  changed = green
+  untracked = cyan
 [push]
 	default = upstream
 [filter "lfs"]
