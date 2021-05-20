@@ -31,7 +31,6 @@ section_split "Welcome to 3proxy docker installer!"
 section_split_plain
 echo "Please enter your desired user name:"
 read -r DESIRED_USERNAME
-USERS_HOME_FOLDER="/home/$DESIRED_USERNAME"
 
 section_split_plain
 run_setup_script "remove-file-limits"
@@ -49,11 +48,6 @@ curl -s "$GH_CONTENT/docker_server_setup/main/add_user.sh" | \
 section_split "Setting up docker, docker-compose, and premissions"
 curl -s "$GH_CONTENT/docker_server_setup/main/docker_setup.sh" | \
   bash -s -- "$DESIRED_USERNAME"
-
-section_split "Setting up $DESIRED_USERNAME to be able to download private github repos"
-
-curl -s "$GH_CONTENT/docker_server_setup/main/github_setup.sh" | \
-  bash -s -- "$USERS_HOME_FOLDER"
 
 section_split "Once you log out, you may do this to ease access:"
 echo "sudo apt-get install openssh-client && ssh-copy-id $DESIRED_USERNAME@$IP4"

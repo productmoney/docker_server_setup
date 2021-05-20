@@ -38,7 +38,7 @@ echo "Key will have the name: $HOSTNAME (from using command hostname)"
 
 section_split "ssh-keygen -q -t rsa -N '' -f $SSH_ID_RSA -C \"$GITHUB_USERNAME\" <<<y 2>&1 >/dev/null"
 ssh-keygen -q -t rsa -N '' -f "$SSH_ID_RSA" -C "$GITHUB_USERNAME" <<<y 2>&1 >/dev/null
-echo "eval \"\$(ssh-agent -s)\""
+echo "eval \$(ssh-agent -s)"
 eval "$(ssh-agent -s)"
 echo "ssh-add $SSH_ID_RSA"
 ssh-add "$SSH_ID_RSA"
