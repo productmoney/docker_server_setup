@@ -15,6 +15,3 @@ wget -q -O "$HOME/.zshrc" "$REPO_LOC/.zshrc"
 
 echo "wget -q -O $HOME/.oh-my-zsh/themes/$THEME_NAME $REPO_LOC/$THEME_NAME"
 wget -q -O "$HOME/.oh-my-zsh/themes/$THEME_NAME" "$REPO_LOC/$THEME_NAME"
-
-# shellcheck disable=SC1090
-source ~/.zshrc &>/dev/null

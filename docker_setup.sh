@@ -2,9 +2,6 @@
 
 USER=$1
 
-DEBIAN_OS_DISTRO="debian os"
-UBUNTU_OS_DISTRO="Ubuntu"
-
 UNAME=$(uname | tr "[:upper:]" "[:lower:]")
 UNS=$(uname -s)
 UNM=$(uname -m)
@@ -27,18 +24,6 @@ function section_split_plain() {
   printf "\n----------------------------------------\n"
 }
 
-# Get "Ubuntu" or "debian os"
-if [ "$UNAME" == "linux" ]; then
-    # If available, use LSB to identify distribution
-    if [ -f /etc/lsb-release -o -d /etc/lsb-release.d ]; then
-        DISTRO=$(lsb_release -i | cut -d: -f2 | sed s/'^\t'//)
-    # Otherwise, use release info file
-    else
-        DISTRO=$(ls -d /etc/[A-Za-z]*[_-][rv]e[lr]* | grep -v "lsb" | cut -d'/' -f3 | cut -d'-' -f1 | cut -d'_' -f1)
-    fi
-fi
-unset UNAME
-
 # Install Dependencies
 section_split "apt-get install -y --no-install-recommends
     apt-transport-https
@@ -54,6 +39,9 @@ apt-get install -y --no-install-recommends \
     lsb-release
 
 KEYRING_DISTRO="debian"
+if grep "Ubuntu" "/etc/*release*"; then
+  KEYRING_DISTRO="ubuntu"
+fi
 
 if [ "$DISTRO" == "$UBUNTU_OS_DISTRO" ]; then
   section_split "Ubuntu operating system detected"
