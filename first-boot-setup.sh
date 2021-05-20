@@ -67,5 +67,8 @@ section_split "Setting up docker, docker-compose, and premissions"
 curl -s "$GH_CONTENT/docker_server_setup/main/docker_setup.sh" | \
   bash -s -- "$DESIRED_USERNAME"
 
-section_split "Done, please re-login as $DESIRED_USERNAME now using password:"
-echo "$randompw"
+#section_split "Done, please re-login as $DESIRED_USERNAME now using password:"
+#echo "$randompw"
+
+section_split "su $DESIRED_USERNAME"
+su "$DESIRED_USERNAME"
