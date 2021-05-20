@@ -2,11 +2,6 @@
 
 USER=$1
 
-UNAME=$(uname | tr "[:upper:]" "[:lower:]")
-UNS=$(uname -s)
-UNM=$(uname -m)
-LSBCS=$(lsb_release -cs)
-
 DOCKER_COMPOSE_VERSION="1.28.6"
 DOCKER_COMPOSE_LOCATION="https://github.com/docker/compose/releases/download/$DOCKER_COMPOSE_VERSION/docker-compose-$UNS-$UNM"
 DOCKER_COMPOSE_INSTALL_LOCATION="/usr/local/bin/docker-compose"
@@ -37,6 +32,11 @@ apt-get install -y --no-install-recommends \
     curl \
     gnupg \
     lsb-release
+
+#UNAME=$(uname | tr "[:upper:]" "[:lower:]")
+UNS=$(uname -s)
+UNM=$(uname -m)
+LSBCS=$(lsb_release -cs)
 
 KEYRING_DISTRO="debian"
 if grep "Ubuntu" "/etc/"*release*; then
