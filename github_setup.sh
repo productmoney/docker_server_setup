@@ -110,3 +110,5 @@ cat > "$GITCONFIG" << EOL
 [url "https://$GITHUB_AUTH_TOKEN:@github.com/"]
 	insteadOf = https://github.com/
 EOL
+
+eval "$(ssh-agent)"
