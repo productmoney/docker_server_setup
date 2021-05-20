@@ -26,7 +26,7 @@ function section_split_plain() {
   printf "\n----------------------------------------\n"
 }
 
-section_split "Welcome to 3proxy docker installer!"
+section_split "Welcome to first boot docker installer!"
 
 section_split_plain
 echo "Please enter your desired user name:"
@@ -55,7 +55,7 @@ echo ""
 echo "You may now login to this server using the command:"
 echo "ssh $DESIRED_USERNAME@$IP4"
 echo ""
-echo ", and the password:"
+echo "The users password is:"
 echo "$randompw"
 
 section_split "su $DESIRED_USERNAME"
