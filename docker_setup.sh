@@ -39,7 +39,7 @@ apt-get install -y --no-install-recommends \
     lsb-release
 
 KEYRING_DISTRO="debian"
-if grep "Ubuntu" "/etc/*release*"; then
+if grep "Ubuntu" "/etc/"*release*; then
   KEYRING_DISTRO="ubuntu"
 fi
 
