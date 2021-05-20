@@ -24,7 +24,7 @@ function section_split() {
 }
 
 function section_split_plain() {
-  printf "\n----------------------------------------"
+  printf "\n----------------------------------------\n"
 }
 
 # Get "Ubuntu" or "debian os"

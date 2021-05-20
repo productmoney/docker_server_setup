@@ -1,9 +1,9 @@
 #!/bin/bash
 
 USERS_HOME_FOLDER="$1"
-GITHUB_USERNAME=$2
-GITHUB_EMAIL=$3
-GITHUB_AUTH_TOKEN=$4
+GITHUB_USERNAME="$2"
+GITHUB_EMAIL="$3"
+GITHUB_AUTH_TOKEN="$4"
 
 SSH_DIR="$USERS_HOME_FOLDER/.ssh"
 SSH_ID_RSA="$SSH_DIR/id_rsa"
@@ -20,7 +20,7 @@ function section_split() {
 }
 
 function section_split_plain() {
-  printf "\n----------------------------------------"
+  printf "\n----------------------------------------\n"
 }
 
 HOSTNAME=$(hostname)
