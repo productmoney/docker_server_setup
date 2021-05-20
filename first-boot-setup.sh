@@ -27,21 +27,22 @@ function section_split_plain() {
 
 section_split "Welcome to 3proxy docker installer!"
 
-section_split "Please enter your desired user name"
+section_split_plain
+echo "Please enter your desired user name:"
 read -r DESIRED_USERNAME
 USERS_HOME_FOLDER="/home/$DESIRED_USERNAME"
 
 echo ""
-echo "Please enter your github username"
+echo "Please enter your github username:"
 read -r GITHUB_USERNAME
 
 echo ""
-echo "Please enter your github email"
+echo "Please enter your github email:"
 read -r GITHUB_EMAIL
 
 echo ""
-echo "Please enter your github auth token"
-echo "If you don't have one, can create at https://github.com/settings/tokens being sure to include the right permissions"
+echo "Please enter your github auth token:"
+echo "(If you don't have one, can create at https://github.com/settings/tokens being sure to include the right permissions)"
 read -r GITHUB_AUTH_TOKEN
 
 section_split_plain
@@ -63,8 +64,8 @@ curl -s "$GH_CONTENT/docker_server_setup/main/github_setup.sh" | \
   bash -s "$USERS_HOME_FOLDER" "$GITHUB_USERNAME" "$GITHUB_EMAIL" "$GITHUB_AUTH_TOKEN"
 
 section_split "Setting up docker, docker-compose, and premissions"
-curl -s "$GH_CONTENT/docker_server_setup/main/setup_docker.sh" | \
+curl -s "$GH_CONTENT/docker_server_setup/main/docker_setup.sh" | \
   bash -s -- "$DESIRED_USERNAME"
 
-section_split "Done, please re-login as $DESIRED_USERNAME  now using password:"
-echo "$RANDOM_PASSWORD"
+section_split "Done, please re-login as $DESIRED_USERNAME now using password:"
+echo "$randompw"
