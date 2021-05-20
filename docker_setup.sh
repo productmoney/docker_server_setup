@@ -59,8 +59,6 @@ if [ "$DISTRO" == "$UBUNTU_OS_DISTRO" ]; then
   section_split "Ubuntu operating system detected"
   KEYRING_DISTRO="ubuntu"
 
-  curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
-
 elif [ "$DISTRO" == "$DEBIAN_OS_DISTRO" ]; then
   section_split "Debian operating system detected"
 
