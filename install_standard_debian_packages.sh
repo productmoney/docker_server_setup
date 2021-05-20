@@ -20,3 +20,4 @@ apt-get install -y software-properties-common
 
 section_split "apt-get install -y htop wget git ntp zsh apt-transport-https ca-certificates curl rsync"
 apt-get install -y htop wget git ntp zsh apt-transport-https ca-certificates curl rsync
+
