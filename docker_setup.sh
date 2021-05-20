@@ -57,8 +57,8 @@ DOCKER_KEYRING="/usr/share/keyrings/docker-archive-keyring.gpg"
 DOCKER_DOWNLOAD_LOCATION="https://download.docker.com/linux/$KEYRING_DISTRO"
 DOCKER_VERSION="stable"
 
-section_split "curl -fsSL $GPG_LOCATION | sudo gpg --dearmor -o $DOCKER_KEYRING"
-curl -fsSL "$GPG_LOCATION" | sudo gpg --dearmor -o "$DOCKER_KEYRING"
+section_split "curl -fsSL $GPG_LOCATION | gpg --dearmor -o $DOCKER_KEYRING"
+curl -fsSL "$GPG_LOCATION" | gpg --dearmor -o "$DOCKER_KEYRING"
 
 section_split "deb [arch=amd64 signed-by=$DOCKER_KEYRING] $DOCKER_DOWNLOAD_LOCATION $LSBCS $DOCKER_VERSION | tee $DOCKER_SOURCES_LIST > /dev/null"
 echo \
@@ -83,7 +83,7 @@ section_split "curl -s -L $DOCKER_COMPOSE_LOCATION -o $DOCKER_COMPOSE_INSTALL_LO
 curl -s -L "$DOCKER_COMPOSE_LOCATION" -o "$DOCKER_COMPOSE_INSTALL_LOCATION"
 
 section_split "chmod +x $DOCKER_COMPOSE_INSTALL_LOCATION"
-sudo chmod +x "$DOCKER_COMPOSE_INSTALL_LOCATION"
+chmod +x "$DOCKER_COMPOSE_INSTALL_LOCATION"
 
 section_split_plain
 docker-compose --version
