@@ -46,6 +46,7 @@ else
   section_split "Debian operating system detected"
 fi
 
+
 GPG_LOCATION="https://download.docker.com/linux/$KEYRING_DISTRO/gpg"
 DOCKER_KEYRING="/usr/share/keyrings/docker-archive-keyring.gpg"
 DOCKER_DOWNLOAD_LOCATION="https://download.docker.com/linux/$KEYRING_DISTRO"
