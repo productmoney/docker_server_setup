@@ -67,11 +67,7 @@ section_split "Setting up docker, docker-compose, and premissions"
 curl -s "$GH_CONTENT/docker_server_setup/main/docker_setup.sh" | \
   bash -s -- "$DESIRED_USERNAME"
 
-section_split "su $DESIRED_USERNAME"
-# shellcheck disable=SC2117
-su "$DESIRED_USERNAME"
-
-echo "Once you log out, you may do this to ease access:"
+section_split "Once you log out, you may do this to ease access:"
 echo "sudo apt-get install openssh-client && ssh-copy-id $DESIRED_USERNAME@$IP4"
 echo ""
 echo "You may now login to this server using the command:"
@@ -79,3 +75,7 @@ echo "ssh $DESIRED_USERNAME@$IP4"
 echo ""
 echo ", and the password:"
 echo "$RANDOM_PASSWORD"
+
+section_split "su $DESIRED_USERNAME"
+# shellcheck disable=SC2117
+su "$DESIRED_USERNAME"
