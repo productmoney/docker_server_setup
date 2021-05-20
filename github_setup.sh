@@ -9,7 +9,9 @@ function section_split_plain() {
 }
 
 USERS_HOME_FOLDER="$1"
-
+GITHUB_USERNAME=$2
+GITHUB_EMAIL=$3
+GITHUB_AUTH_TOKEN=$4
 
 SSH_DIR="$USERS_HOME_FOLDER/.ssh"
 SSH_ID_RSA="$SSH_DIR/id_rsa"
@@ -18,6 +20,8 @@ SSH_CONFIG="$SSH_DIR/config"
 GITCONFIG="$USERS_HOME_FOLDER/.gitconfig"
 
 GITHUB_KEYS="https://api.github.com/user/keys"
+
+mkdir -p "$SSH_DIR"
 
 HOSTNAME=$(hostname)
 echo "Key will have the name: $HOSTNAME (from using command hostname)"
