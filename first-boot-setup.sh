@@ -4,6 +4,8 @@ USER_PASSWORD_LENGTH=12
 ORGANIZATION="productmoney"
 GH_CONTENT="https://raw.githubusercontent.com/$ORGANIZATION"
 
+IP4=$(curl -4 -s icanhazip.com)
+
 export DEBIAN_FRONTEND=noninteractive
 DEBIAN_FRONTEND=noninteractive
 
