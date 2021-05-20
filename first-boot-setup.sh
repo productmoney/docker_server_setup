@@ -32,19 +32,6 @@ echo "Please enter your desired user name:"
 read -r DESIRED_USERNAME
 USERS_HOME_FOLDER="/home/$DESIRED_USERNAME"
 
-echo ""
-echo "Please enter your github username:"
-read -r GITHUB_USERNAME
-
-echo ""
-echo "Please enter your github email:"
-read -r GITHUB_EMAIL
-
-echo ""
-echo "Please enter your github auth token:"
-echo "(If you don't have one, can create at https://github.com/settings/tokens being sure to include the right permissions)"
-read -r GITHUB_AUTH_TOKEN
-
 section_split_plain
 run_setup_script "remove-file-limits"
 

@@ -1,9 +1,19 @@
 #!/bin/bash
 
-USERS_HOME_FOLDER="$1"
-GITHUB_USERNAME="$2"
-GITHUB_EMAIL="$3"
-GITHUB_AUTH_TOKEN="$4"
+USERS_HOME_FOLDER="$HOME"
+
+echo ""
+echo "Please enter your github username:"
+read -r GITHUB_USERNAME
+
+echo ""
+echo "Please enter your github email:"
+read -r GITHUB_EMAIL
+
+echo ""
+echo "Please enter your github auth token:"
+echo "(If you don't have one, can create at https://github.com/settings/tokens being sure to include the right permissions)"
+read -r GITHUB_AUTH_TOKEN
 
 SSH_DIR="$USERS_HOME_FOLDER/.ssh"
 SSH_ID_RSA="$SSH_DIR/id_rsa"
