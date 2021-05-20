@@ -4,7 +4,7 @@ export DEBIAN_FRONTEND=noninteractive
 DEBIAN_FRONTEND=noninteractive
 
 function section_split() {
-  printf "\n----------------------------------------\n%s\n" "$1"
+  printf "\n----------------------------------------\n%s\n\n" "$1"
 }
 
 section_split "apt-get update"
@@ -20,4 +20,3 @@ apt-get install -y software-properties-common
 
 section_split "apt-get install -y htop wget git ntp zsh apt-transport-https ca-certificates curl rsync"
 apt-get install -y htop wget git ntp zsh apt-transport-https ca-certificates curl rsync
-
