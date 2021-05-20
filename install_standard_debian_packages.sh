@@ -27,7 +27,8 @@ section_split "apt-get install -y
   apt-transport-https
   ca-certificates
   curl
-  rsync"
+  rsync
+  sudo"
 apt-get install -y \
   htop \
   wget \
@@ -37,4 +38,5 @@ apt-get install -y \
   apt-transport-https \
   ca-certificates \
   curl \
-  rsync
+  rsync \
+  sudo

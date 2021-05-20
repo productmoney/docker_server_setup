@@ -2,12 +2,6 @@
 
 USER=$1
 
-DOCKER_COMPOSE_VERSION="1.28.6"
-DOCKER_COMPOSE_LOCATION="https://github.com/docker/compose/releases/download/$DOCKER_COMPOSE_VERSION/docker-compose-$UNS-$UNM"
-DOCKER_COMPOSE_INSTALL_LOCATION="/usr/local/bin/docker-compose"
-
-DOCKER_SOURCES_LIST="/etc/apt/sources.list.d/docker.list"
-
 export DEBIAN_FRONTEND=noninteractive
 DEBIAN_FRONTEND=noninteractive
 
@@ -37,6 +31,12 @@ apt-get install -y --no-install-recommends \
 UNS=$(uname -s)
 UNM=$(uname -m)
 LSBCS=$(lsb_release -cs)
+
+DOCKER_COMPOSE_VERSION="1.28.6"
+DOCKER_COMPOSE_LOCATION="https://github.com/docker/compose/releases/download/$DOCKER_COMPOSE_VERSION/docker-compose-$UNS-$UNM"
+DOCKER_COMPOSE_INSTALL_LOCATION="/usr/local/bin/docker-compose"
+
+DOCKER_SOURCES_LIST="/etc/apt/sources.list.d/docker.list"
 
 KEYRING_DISTRO="debian"
 if grep "Ubuntu" "/etc/"*release*; then
