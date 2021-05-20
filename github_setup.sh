@@ -1,8 +1,26 @@
 #!/bin/bash
 
-echo ""
-echo "----------"
-echo "Please enter your github username"
+function section_split() {
+  printf "\n----------------------------------------\n%s\n\n" "$1"
+}
+
+function section_split_plain() {
+  printf "\n----------------------------------------"
+}
+
+USERS_HOME_FOLDER="~"
+if [ -z "$1" ]; then
+  : # Home directory is unset
+else
+  USERS_HOME_FOLDER=$1
+fi
+SSH_DIR="$USERS_HOME_FOLDER/.ssh"
+SSH_ID_RSA="$SSH_DIR/id_rsa"
+SSH_ID_RSA_PUB="$SSH_ID_RSA.pub"
+
+GITHUB_KEYS="https://api.github.com/user/keys"
+
+section_split "Please enter your github username"
 read -r GITHUB_USERNAME
 
 echo "Please enter your github email"
@@ -15,25 +33,22 @@ read -r GITHUB_AUTH_TOKEN
 HOSTNAME=$(hostname)
 echo "Key will have the name: $HOSTNAME (from using command hostname)"
 
-echo ""
-echo "----------"
-echo "ssh-keygen -q -t rsa -N '' -f ~/.ssh/id_rsa -C \"$GITHUB_USERNAME\" <<<y 2>&1 >/dev/null"
+section_split "ssh-keygen -q -t rsa -N '' -f $SSH_ID_RSA -C \"$GITHUB_USERNAME\" <<<y 2>&1 >/dev/null"
 ssh-keygen -q -t rsa -N '' -f ~/.ssh/id_rsa -C "$GITHUB_USERNAME" <<<y 2>&1 >/dev/null
 echo "eval \"\$(ssh-agent -s)\""
 eval "$(ssh-agent -s)"
-echo 'ssh-add ~/.ssh/id_rsa'
-ssh-add ~/.ssh/id_rsa
-echo "pub=\$(cat ~/.ssh/id_rsa.pub)"
-pub=$(cat ~/.ssh/id_rsa.pub)
+echo "ssh-add $SSH_ID_RSA"
+ssh-add "$SSH_ID_RSA"
+echo "pub=\$(cat $SSH_ID_RSA_PUB)"
+pub=$(cat "$SSH_ID_RSA_PUB")
 # shellcheck disable=SC2016
-echo 'curl -H "Authorization: token $GITHUB_AUTH_TOKEN" -X POST -d "{\"title\":\"`hostname`\",\"key\":\"$pub\"}" https://api.github.com/user/keys'
-curl -H "Authorization: token $GITHUB_AUTH_TOKEN" -X POST -d "{\"title\":\"$HOSTNAME\",\"key\":\"$pub\"}" https://api.github.com/user/keys
+echo "curl -H Authorization: token $GITHUB_AUTH_TOKEN -X POST -d {\"title\":\"`$HOSTNAME`\",\"key\":\"$pub\"} $GITHUB_KEYS"
+curl -H "Authorization: token $GITHUB_AUTH_TOKEN" -X POST -d "{\"title\":\"$HOSTNAME\",\"key\":\"$pub\"}" "$GITHUB_KEYS"
 
-echo ""
-echo "----------"
-echo 'echo "StrictHostKeyChecking no " > ~/.ssh/config'
+section_split 'echo "StrictHostKeyChecking no " > ~/.ssh/config'
 echo "StrictHostKeyChecking no " > ~/.ssh/config
 
+section_split "Writing .gitconfig"
 cat > ~/.gitconfig << EOL
 [user]
 	email = $GITHUB_EMAIL
