@@ -4,7 +4,7 @@ export DEBIAN_FRONTEND=noninteractive
 DEBIAN_FRONTEND=noninteractive
 
 function section_split() {
-  printf "\n----------------------------------------\n%s" "$1"
+  printf "\n----------------------------------------\n%s\n" "$1"
 }
 
 section_split "apt-get update"
