@@ -1,4 +1,6 @@
 #!/bin/bash
 
-echo "sh -c \"\$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
-sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+OHMYZSH_LOC="https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh"
+
+echo "sh -c \"\$(curl -fsSL $OHMYZSH_LOC)"
+sh -c "$(curl -fsSL $OHMYZSH_LOC)"
