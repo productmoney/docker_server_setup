@@ -1,13 +1,5 @@
 #!/bin/bash
 
-function section_split() {
-  printf "\n----------------------------------------\n%s\n\n" "$1"
-}
-
-function section_split_plain() {
-  printf "\n----------------------------------------"
-}
-
 USERS_HOME_FOLDER="$1"
 GITHUB_USERNAME=$2
 GITHUB_EMAIL=$3
@@ -23,6 +15,14 @@ GITHUB_KEYS="https://api.github.com/user/keys"
 
 mkdir -p "$SSH_DIR"
 
+function section_split() {
+  printf "\n----------------------------------------\n%s\n\n" "$1"
+}
+
+function section_split_plain() {
+  printf "\n----------------------------------------"
+}
+
 HOSTNAME=$(hostname)
 echo "Key will have the name: $HOSTNAME (from using command hostname)"
 
@@ -35,7 +35,7 @@ ssh-add "$SSH_ID_RSA"
 echo "pub=\$(cat $SSH_ID_RSA_PUB)"
 pub=$(cat "$SSH_ID_RSA_PUB")
 # shellcheck disable=SC2016
-echo "curl -H Authorization: token $GITHUB_AUTH_TOKEN -X POST -d {\"title\":\"`$HOSTNAME`\",\"key\":\"$pub\"} $GITHUB_KEYS"
+echo "curl -H Authorization: token $GITHUB_AUTH_TOKEN -X POST -d {\"title\":\"$HOSTNAME\",\"key\":\"$pub\"} $GITHUB_KEYS"
 curl -H "Authorization: token $GITHUB_AUTH_TOKEN" -X POST -d "{\"title\":\"$HOSTNAME\",\"key\":\"$pub\"}" "$GITHUB_KEYS"
 
 section_split "echo 'StrictHostKeyChecking no' > $SSH_CONFIG"
