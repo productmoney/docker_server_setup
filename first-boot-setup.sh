@@ -63,7 +63,7 @@ echo "You may now login to this server using the command:"
 echo "ssh $DESIRED_USERNAME@$IP4"
 echo ""
 echo ", and the password:"
-echo "$RANDOM_PASSWORD"
+echo "$randompw"
 
 section_split "su $DESIRED_USERNAME"
 # shellcheck disable=SC2117
