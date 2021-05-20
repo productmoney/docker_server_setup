@@ -26,7 +26,7 @@ function section_split_plain() {
   printf "\n----------------------------------------\n"
 }
 
-section_split "Welcome to 3proxy docker installer!"
+section_split "Welcome to docker server installer setup!"
 
 section_split_plain
 echo "Please enter your desired user name:"
