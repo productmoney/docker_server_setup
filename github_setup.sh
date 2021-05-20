@@ -8,33 +8,22 @@ function section_split_plain() {
   printf "\n----------------------------------------"
 }
 
-USERS_HOME_FOLDER="~"
-if [ -z "$1" ]; then
-  : # Home directory is unset
-else
-  USERS_HOME_FOLDER=$1
-fi
+USERS_HOME_FOLDER="$1"
+
+
 SSH_DIR="$USERS_HOME_FOLDER/.ssh"
 SSH_ID_RSA="$SSH_DIR/id_rsa"
 SSH_ID_RSA_PUB="$SSH_ID_RSA.pub"
+SSH_CONFIG="$SSH_DIR/config"
+GITCONFIG="$USERS_HOME_FOLDER/.gitconfig"
 
 GITHUB_KEYS="https://api.github.com/user/keys"
-
-section_split "Please enter your github username"
-read -r GITHUB_USERNAME
-
-echo "Please enter your github email"
-read -r GITHUB_EMAIL
-
-echo "Please enter your github auth token"
-echo "If you don't have one, can create at https://github.com/settings/tokens being sure to include the right permissions"
-read -r GITHUB_AUTH_TOKEN
 
 HOSTNAME=$(hostname)
 echo "Key will have the name: $HOSTNAME (from using command hostname)"
 
 section_split "ssh-keygen -q -t rsa -N '' -f $SSH_ID_RSA -C \"$GITHUB_USERNAME\" <<<y 2>&1 >/dev/null"
-ssh-keygen -q -t rsa -N '' -f ~/.ssh/id_rsa -C "$GITHUB_USERNAME" <<<y 2>&1 >/dev/null
+ssh-keygen -q -t rsa -N '' -f "$SSH_ID_RSA" -C "$GITHUB_USERNAME" <<<y 2>&1 >/dev/null
 echo "eval \"\$(ssh-agent -s)\""
 eval "$(ssh-agent -s)"
 echo "ssh-add $SSH_ID_RSA"
@@ -45,11 +34,11 @@ pub=$(cat "$SSH_ID_RSA_PUB")
 echo "curl -H Authorization: token $GITHUB_AUTH_TOKEN -X POST -d {\"title\":\"`$HOSTNAME`\",\"key\":\"$pub\"} $GITHUB_KEYS"
 curl -H "Authorization: token $GITHUB_AUTH_TOKEN" -X POST -d "{\"title\":\"$HOSTNAME\",\"key\":\"$pub\"}" "$GITHUB_KEYS"
 
-section_split 'echo "StrictHostKeyChecking no " > ~/.ssh/config'
-echo "StrictHostKeyChecking no " > ~/.ssh/config
+section_split "echo 'StrictHostKeyChecking no' > $SSH_CONFIG"
+echo "StrictHostKeyChecking no " > "$SSH_CONFIG"
 
 section_split "Writing .gitconfig"
-cat > ~/.gitconfig << EOL
+cat > "$GITCONFIG" << EOL
 [user]
 	email = $GITHUB_EMAIL
 [core]
