@@ -41,15 +41,9 @@ apt-get install -y --no-install-recommends \
 KEYRING_DISTRO="debian"
 if grep "Ubuntu" "/etc/"*release*; then
   KEYRING_DISTRO="ubuntu"
-fi
-
-if [ "$DISTRO" == "$UBUNTU_OS_DISTRO" ]; then
   section_split "Ubuntu operating system detected"
-  KEYRING_DISTRO="ubuntu"
-
-elif [ "$DISTRO" == "$DEBIAN_OS_DISTRO" ]; then
+else
   section_split "Debian operating system detected"
-
 fi
 
 GPG_LOCATION="https://download.docker.com/linux/$KEYRING_DISTRO/gpg"
