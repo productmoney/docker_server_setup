@@ -7,3 +7,4 @@ echo "Added $DESIRED_USERNAME with the randomized password: "
 echo "$2"
 
 adduser "$1" sudo
+
