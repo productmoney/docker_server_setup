@@ -3,7 +3,8 @@
 export DEBIAN_FRONTEND=noninteractive
 DEBIAN_FRONTEND=noninteractive
 
-CADDYFILE="~/hosting/caddy/Caddyfile"
+CADDY_DIR="$HOME/hosting/caddy"
+CADDYFILE="$CADDY_DIR/Caddyfile"
 STARTING_CADDYFILE=""
 
 function section_split() {
@@ -14,32 +15,37 @@ function section_split_plain() {
   printf "\n----------------------------------------\n"
 }
 
-section_split "apt-get install -y --no-install-recommends
-  debian-keyring
-  debian-archive-keyring
-  apt-transport-https"
-apt-get install -y --no-install-recommends \
-  debian-keyring \
-  debian-archive-keyring \
-  apt-transport-https
+# Make sure docker properly installed
+if [ -x "$(command -v caddy)" ]; then
+  echo "caddy already installed"
+else
+  section_split "apt-get install -y --no-install-recommends
+    debian-keyring
+    debian-archive-keyring
+    apt-transport-https"
+  sudo apt-get install -y --no-install-recommends \
+    debian-keyring \
+    debian-archive-keyring \
+    apt-transport-https
 
-section_split "curl -1sLf 'https://dl.cloudsmith.io/public/caddy/stable/gpg.key' | sudo apt-key add -"
-curl -1sLf 'https://dl.cloudsmith.io/public/caddy/stable/gpg.key' | sudo apt-key add -
+  section_split "curl -1sLf 'https://dl.cloudsmith.io/public/caddy/stable/gpg.key' | sudo apt-key add -"
+  curl -1sLf 'https://dl.cloudsmith.io/public/caddy/stable/gpg.key' | sudo apt-key add -
 
-section_split "curl -1sLf 'https://dl.cloudsmith.io/public/caddy/stable/debian.deb.txt' | sudo tee /etc/apt/sources.list.d/caddy-stable.list"
-curl -1sLf 'https://dl.cloudsmith.io/public/caddy/stable/debian.deb.txt' | sudo tee /etc/apt/sources.list.d/caddy-stable.list
+  section_split "curl -1sLf 'https://dl.cloudsmith.io/public/caddy/stable/debian.deb.txt' | sudo tee /etc/apt/sources.list.d/caddy-stable.list"
+  curl -1sLf 'https://dl.cloudsmith.io/public/caddy/stable/debian.deb.txt' | sudo tee /etc/apt/sources.list.d/caddy-stable.list
 
-section_split "sudo apt update"
-sudo apt update
+  section_split "sudo apt update"
+  sudo apt update
 
-section_split "sudo apt install caddy"
-sudo apt install caddy
+  section_split "sudo apt install caddy"
+  sudo apt install caddy
 
-section_split "caddy version"
-caddy version
+  section_split "caddy version"
+  caddy version
+fi
 
-mkdir -p ~/hosting/caddy
-#echo "Wrote to $CADDYFILE:"
+mkdir -p "$CADDY_DIR"
+touch "$CADDYFILE"
 echo "$STARTING_CADDYFILE" | tee "$CADDYFILE"
 
 section_split "Setting up caddy sites"
@@ -54,8 +60,7 @@ function add_caddy_site() {
   read -r nginx_entry_port
 
   local caddy_entry
-  caddy_entry="
-$site_url {
+  caddy_entry="$site_url {
     encode gzip zstd
     reverse_proxy /* localhost:$nginx_entry_port
 }
@@ -63,17 +68,27 @@ $site_url {
 
   echo "Appended to $CADDYFILE:"
   echo "$caddy_entry" | tee -a "$CADDYFILE"
-
-END
 }
 
-while true; do
-    read  -r -p "Do you wish to add a caddy site?" yn
-    case $yn in
-        [Yy]* ) add_caddy_site; break;;
-        [Nn]* ) exit;;
-        * ) echo "Please answer yes or no.";;
-    esac
+function write_caddy_config() {
+  echo "Do you wish to add a caddy site?"
+  while true; do
+    select yn in "Yes" "No"; do
+      case $yn in
+          Yes ) add_caddy_site; break;;
+          No ) break;;
+      esac
+    done
+  done
+}
+
+echo "Do you wish to edit caddy config @$CADDYFILE?"
+select yn in "Yes" "No"; do
+  case $yn in
+      Yes ) write_caddy_config; break;;
+      No ) break;;
+  esac
 done
 
+sudo caddy stop
 sudo caddy start --config ~/hosting/caddy/Caddyfile
