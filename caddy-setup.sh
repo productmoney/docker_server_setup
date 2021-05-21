@@ -76,13 +76,19 @@ function add_caddy_site() {
   echo "$caddy_entry" | tee -a "$CADDYFILE"
 }
 
+function start_caddy() {
+  sudo caddy stop
+  sudo caddy start --config "$CADDYFILE"
+  exit
+}
+
 function write_caddy_config() {
-  echo "Do you wish to add a caddy site?"
   while true; do
+    section_split "Do you wish to add a caddy site?"
     select yn in "Yes" "No"; do
       case $yn in
           Yes ) add_caddy_site; break;;
-          No ) break;;
+          No ) start_caddy;;
       esac
     done
   done
@@ -92,9 +98,6 @@ echo "Do you wish to edit caddy config @$CADDYFILE?"
 select yn in "Yes" "No"; do
   case $yn in
       Yes ) write_caddy_config; break;;
-      No ) break;;
+      No ) start_caddy;;
   esac
 done
-
-sudo caddy stop
-sudo caddy start --config ~/hosting/caddy/Caddyfile
