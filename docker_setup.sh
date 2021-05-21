@@ -15,17 +15,17 @@ function section_split_plain() {
 
 # Install Dependencies
 section_split "apt-get install -y --no-install-recommends
-    apt-transport-https
-    ca-certificates
-    curl
-    gnupg
-    lsb-release"
+  apt-transport-https
+  ca-certificates
+  curl
+  gnupg
+  lsb-release"
 apt-get install -y --no-install-recommends \
-    apt-transport-https \
-    ca-certificates \
-    curl \
-    gnupg \
-    lsb-release
+  apt-transport-https \
+  ca-certificates \
+  curl \
+  gnupg \
+  lsb-release
 
 #UNAME=$(uname | tr "[:upper:]" "[:lower:]")
 UNS=$(uname -s)
