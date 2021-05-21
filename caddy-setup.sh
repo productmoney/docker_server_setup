@@ -46,7 +46,13 @@ fi
 
 mkdir -p "$CADDY_DIR"
 touch "$CADDYFILE"
-echo "$STARTING_CADDYFILE" | tee "$CADDYFILE"
+echo "Do you wish to wipe caddy config @$CADDYFILE?"
+select yn in "Yes" "No"; do
+  case $yn in
+      Yes ) echo "$STARTING_CADDYFILE" | tee "$CADDYFILE"; break;;
+      No ) break;;
+  esac
+done
 
 section_split "Setting up caddy sites"
 
