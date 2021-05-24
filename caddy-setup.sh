@@ -7,6 +7,7 @@ CADDY_DIR="$HOME/hosting/caddy"
 CADDYFILE="$CADDY_DIR/Caddyfile"
 STARTING_CADDYFILE=""
 
+
 function section_split() {
   printf "\n----------------------------------------\n%s\n\n" "$1"
 }
@@ -43,6 +44,16 @@ else
   section_split "caddy version"
   caddy version
 fi
+
+mkdir -p "$CADDY_DIR"
+touch "$CADDYFILE"
+echo "Do you wish to wipe caddy config @$CADDYFILE?"
+select yn in "Yes" "No"; do
+  case $yn in
+      Yes ) echo "$STARTING_CADDYFILE" | tee "$CADDYFILE"; break;;
+      No ) break;;
+  esac
+done
 
 mkdir -p "$CADDY_DIR"
 touch "$CADDYFILE"
