@@ -28,7 +28,8 @@ section_split "apt-get install -y
   ca-certificates
   curl
   rsync
-  sudo"
+  sudo
+  dnsutils"
 apt-get install -y \
   htop \
   wget \
@@ -39,4 +40,5 @@ apt-get install -y \
   ca-certificates \
   curl \
   rsync \
-  sudo
+  sudo \
+  dnsutils
