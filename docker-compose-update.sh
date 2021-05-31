@@ -14,7 +14,7 @@ function section_split() {
 }
 
 section_split "sudo rm "$DOCKER_COMPOSE_INSTALL_LOCATION""
-sudo rm "$DOCKER_COMPOSE_INSTALL_LOCATION" || echo "docker-compose not installed"
+sudo rm "$DOCKER_COMPOSE_INSTALL_LOCATION"
 
 section_split "curl -s -L $DOCKER_COMPOSE_LOCATION -o $DOCKER_COMPOSE_INSTALL_LOCATION"
 sudo curl -s -L "$DOCKER_COMPOSE_LOCATION" -o "$DOCKER_COMPOSE_INSTALL_LOCATION"
