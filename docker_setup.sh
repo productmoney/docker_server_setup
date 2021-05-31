@@ -27,16 +27,11 @@ apt-get install -y --no-install-recommends \
   gnupg \
   lsb-release
 
-#UNAME=$(uname | tr "[:upper:]" "[:lower:]")
-UNS=$(uname -s)
-UNM=$(uname -m)
-LSBCS=$(lsb_release -cs)
-
-DOCKER_COMPOSE_VERSION="1.28.6"
-DOCKER_COMPOSE_LOCATION="https://github.com/docker/compose/releases/download/$DOCKER_COMPOSE_VERSION/docker-compose-$UNS-$UNM"
-DOCKER_COMPOSE_INSTALL_LOCATION="/usr/local/bin/docker-compose"
 
 DOCKER_SOURCES_LIST="/etc/apt/sources.list.d/docker.list"
+
+LSBCS=$(lsb_release -cs)
+
 
 KEYRING_DISTRO="debian"
 if grep "Ubuntu" "/etc/"*release*; then
@@ -73,12 +68,3 @@ docker run hello-world
 
 section_split "usermod -aG docker $USER"
 usermod -aG docker "$USER"
-
-section_split "curl -s -L $DOCKER_COMPOSE_LOCATION -o $DOCKER_COMPOSE_INSTALL_LOCATION"
-curl -s -L "$DOCKER_COMPOSE_LOCATION" -o "$DOCKER_COMPOSE_INSTALL_LOCATION"
-
-section_split "chmod +x $DOCKER_COMPOSE_INSTALL_LOCATION"
-chmod +x "$DOCKER_COMPOSE_INSTALL_LOCATION"
-
-section_split_plain
-docker-compose --version
