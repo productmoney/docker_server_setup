@@ -13,6 +13,8 @@ function section_split() {
   printf "\n----------------------------------------\n%s\n\n" "$1"
 }
 
+rm "$DOCKER_COMPOSE_INSTALL_LOCATION" || echo "docker-compose not installed"
+
 section_split "curl -s -L $DOCKER_COMPOSE_LOCATION -o $DOCKER_COMPOSE_INSTALL_LOCATION"
 sudo curl -s -L "$DOCKER_COMPOSE_LOCATION" -o "$DOCKER_COMPOSE_INSTALL_LOCATION"
 
