@@ -32,9 +32,6 @@ section_split_plain
 echo "Please enter your desired user name:"
 read -r DESIRED_USERNAME
 
-section_split_plain
-run_setup_script "remove-file-limits"
-
 section_split_plain "Installing standard debian packages"
 run_setup_script "install_standard_debian_packages"
 
