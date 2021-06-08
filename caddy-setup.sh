@@ -55,16 +55,6 @@ select yn in "Yes" "No"; do
   esac
 done
 
-mkdir -p "$CADDY_DIR"
-touch "$CADDYFILE"
-echo "Do you wish to wipe caddy config @$CADDYFILE?"
-select yn in "Yes" "No"; do
-  case $yn in
-      Yes ) echo "$STARTING_CADDYFILE" | tee "$CADDYFILE"; break;;
-      No ) break;;
-  esac
-done
-
 section_split "Setting up caddy sites"
 
 function add_caddy_site() {
