@@ -45,7 +45,7 @@ curl -s "$GH_CONTENT/docker_server_setup/main/add_user.sh" | \
 section_split "Setting up docker, docker-compose, and premissions"
 curl -s "$GH_CONTENT/docker_server_setup/main/docker_setup.sh" | \
   bash -s -- "$DESIRED_USERNAME"
-run_setup_script "docker-compose-setup.sh"
+run_setup_script "docker-compose-setup"
 
 section_split "Once you log out, you may do this to ease access:"
 echo "sudo apt-get install openssh-client && ssh-copy-id $DESIRED_USERNAME@$IP4"
