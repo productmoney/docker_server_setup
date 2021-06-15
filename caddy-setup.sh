@@ -78,8 +78,14 @@ function add_caddy_site() {
 }
 
 function start_caddy() {
+
+  echo "cat $CADDYFILE"
+  cat "$CADDYFILE"
+
   sudo caddy stop
-  sudo caddy start --config "$CADDYFILE"
+
+  echo "To start caddy:"
+  echo "sudo caddy start --config $CADDYFILE"
   exit
 }
 
