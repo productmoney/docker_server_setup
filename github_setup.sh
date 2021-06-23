@@ -51,12 +51,27 @@ curl -H "Authorization: token $GITHUB_AUTH_TOKEN" -X POST -d "{\"title\":\"$HOST
 section_split "echo 'StrictHostKeyChecking no' > $SSH_CONFIG"
 echo "StrictHostKeyChecking no " > "$SSH_CONFIG"
 
+mkdir -p ~/.config/git
+section_split "Writing ~/.config/git/.gitignore_global"
+cat > "$HOME/.config/git/.gitignore_global" << EOL
+.idea
+tmp
+venv
+srecret
+**/__pycache__/*
+**/*.pyc
+*.pyc
+*.db.sqlite3
+EOL
+
 section_split "Writing .gitconfig"
 cat > "$GITCONFIG" << EOL
 [user]
 	email = $GITHUB_EMAIL
 [core]
   mergeoptions = --no-commit
+  excludesfile = $HOME/.config/git/.gitignore_global
+  autocrlf = input
 [alias]
   pff = pull --ff-only
   quick = log -1 --format='%h - %an - %ad - %s' --date=local --name-status
@@ -102,11 +117,6 @@ cat > "$GITCONFIG" << EOL
 	smudge = git-lfs smudge -- %f
 	process = git-lfs filter-process
 	required = true
-[difftool "sourcetree"]
-	cmd = opendiff \"$LOCAL\" \"$REMOTE\"
-[mergetool "sourcetree"]
-	cmd = /Applications/Sourcetree.app/Contents/Resources/opendiff-w.sh \"$LOCAL\" \"$REMOTE\" -ancestor \"$BASE\" -merge \"$MERGED\"
-	trustExitCode = true
 [url "https://$GITHUB_AUTH_TOKEN:@github.com/"]
 	insteadOf = https://github.com/
 EOL

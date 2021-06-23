@@ -60,7 +60,7 @@ plugins=(git docker python grunt gulp nmap git-extras ssh-agent ubuntu common-al
 
 # User configuration
 
-export PATH="$PATH:$HOME/.local/bin"
+export PATH="$PATH:$HOME/.local/bin:$HOME/src:$HOME/.cargo/bin:$HOME/go/bin"
 # export MANPATH="/usr/local/man:$MANPATH"
 # /usr/local/nvm/versions/node/v0.12.4/bin:
 
@@ -90,6 +90,15 @@ source $ZSH/oh-my-zsh.sh
 # Example aliases
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
+
+eval "$(mcfly init zsh)"
+export MCFLY_FUZZY=true
+export MCFLY_RESULTS=20
+
+# export NVM_DIR="$([ -z "${XDG_CONFIG_HOME-}" ] && printf %s "${HOME}/.nvm" || printf %s "${XDG_CONFIG_HOME}/nvm")"
+# [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" # This loads nvm
+
+eval "$(zoxide init zsh)"
 
 if [[ -e "$HOME/.zsh_aliases" ]]; then
   . "$HOME/.zsh_aliases"

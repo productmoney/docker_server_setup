@@ -30,7 +30,9 @@ section_split "apt-get install -y
   rsync
   sudo
   dnsutils
-  bat"
+  bat
+  build-essential
+  fd-find"
 apt-get install -y \
   htop \
   wget \
@@ -43,4 +45,6 @@ apt-get install -y \
   rsync \
   sudo \
   dnsutils \
-  bat
+  bat \
+  build-essential \
+  fd-find

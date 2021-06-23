@@ -10,10 +10,51 @@ rm -rf /tmp/gotop
 mkdir -p ~/.local/bin
 ln -s /usr/bin/batcat ~/.local/bin/bat
 
-# lsd
-wget "https://github.com/Peltoche/lsd/releases/download/0.20.1/lsd-musl_0.20.1_amd64.deb"
-sudo dpkg -i lsd*
-rm -f "lsd-"*
-mkdir -p ~/conf/lsd
-wget "https://raw.githubusercontent.com/productmoney/docker_server_setup/main/utilities/lsd/config.yaml" -P ~/conf/lsd
+# Rust
+curl https://sh.rustup.rs -sSf | sh
 
+# delta
+cargo install git-delta
+
+# exa
+cargo install exa
+
+# dust
+cargo install du-dust
+
+# ripgrep
+cargo install ripgrep
+
+# mcfly
+mkdir -p ~/src
+cd ~/src || exit 1
+git clone https://github.com/cantino/mcfly
+cd mcfly || exit 1
+cargo install --path .
+cd "$HOME" || exit 1
+
+# choose
+cargo install choose
+
+# sd
+cargo install sd
+
+# cheat
+sudo apt-get install golang-go
+go get -u github.com/cheat/cheat/cmd/cheat
+
+# nvm
+curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.38.0/install.sh | bash
+nvm install ESTABLISHED
+
+# hyperfine
+cargo install hyperfine
+
+# gping
+cargo install gping
+
+# procs
+cargo install procs
+
+# zoxide
+curl -sS https://webinstall.dev/zoxide | bash
