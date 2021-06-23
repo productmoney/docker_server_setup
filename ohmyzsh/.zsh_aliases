@@ -50,15 +50,6 @@ alias paths-summary='echo -e ${PATH//:/\\n} | sort | uniq'
 # *** Find all files matched in any path folder
 alias pathsfinder='which -a $1'
 
-# *** Extend gnu cmds
-alias ll='ls -lach'
-alias la='ls -A'
-alias l='ls -C'
-alias lsbig='ls -lachS'
-alias lss='lsbig'
-alias lsnew='ls -lacht'
-alias lt='lsnew'
-
 # *** Disk space use in human terms
 alias df='df -h'
 alias du='du -h -c'
