@@ -58,3 +58,7 @@ cargo install procs
 
 # zoxide
 curl -sS https://webinstall.dev/zoxide | bash
+
+# micro
+curl https://getmic.ro | bash
+mv micro "$HOME/.local/bin"
