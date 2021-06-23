@@ -29,7 +29,8 @@ section_split "apt-get install -y
   curl
   rsync
   sudo
-  dnsutils"
+  dnsutils
+  bat"
 apt-get install -y \
   htop \
   wget \
@@ -41,4 +42,5 @@ apt-get install -y \
   curl \
   rsync \
   sudo \
-  dnsutils
+  dnsutils \
+  bat

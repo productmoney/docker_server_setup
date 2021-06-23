@@ -116,3 +116,9 @@ alias dkrmall='f() { docker rm $(docker ps -a -q) };f'
 alias dkrmiall='f() { docker rmi $(docker images -q) };f'
 
 alias remove-old-snaps='f() { sudo snap list --all | while read snapname ver rev trk pub notes; do if [[ $notes = *disabled* ]]; then sudo snap remove "$snapname" --revision="$rev"; fi; done };f'
+
+alias ls='lsd --config-file $HOME/conf/lsd/config.yaml'
+alias l='lsd -l'
+alias la='lsd -a'
+alias lla='lsd -la'
+alias lt='lsd --tree'

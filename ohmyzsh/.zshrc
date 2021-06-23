@@ -60,7 +60,7 @@ plugins=(git docker python grunt gulp nmap git-extras ssh-agent ubuntu common-al
 
 # User configuration
 
-export PATH="$PATH"
+export PATH="$PATH:$HOME/.local/bin"
 # export MANPATH="/usr/local/man:$MANPATH"
 # /usr/local/nvm/versions/node/v0.12.4/bin:
 
