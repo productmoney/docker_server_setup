@@ -1,31 +1,31 @@
 #!/bin/bash
 
-# gotop
-git clone --depth 1 https://github.com/cjbassi/gotop /tmp/gotop
-/tmp/gotop/scripts/download.sh
+# gotop process monitor
+git clone --depth 1 "https://github.com/cjbassi/gotop" "/tmp/gotop"
+bash "/tmp/gotop/scripts/download.sh"
 sudo mv gotop /usr/bin/
 rm -rf /tmp/gotop
 
-# bat
+# bat better cat
 mkdir -p ~/.local/bin
 ln -s /usr/bin/batcat ~/.local/bin/bat
 
-# Rust
+# Rust programs and lang
 curl https://sh.rustup.rs -sSf | sh
 
-# delta
+# delta diff
 cargo install git-delta
 
-# exa
+# exa ls
 cargo install exa
 
-# dust
+# dust du
 cargo install du-dust
 
-# ripgrep
+# ripgrep grep recursive
 cargo install ripgrep
 
-# mcfly
+# mcfly term search
 mkdir -p ~/src
 cd ~/src || exit 1
 git clone https://github.com/cantino/mcfly
@@ -33,19 +33,24 @@ cd mcfly || exit 1
 cargo install --path .
 cd "$HOME" || exit 1
 
-# choose
+# choose splits
 cargo install choose
 
-# sd
+# sd find and replace
 cargo install sd
 
-# cheat
+# cheat hints
 sudo apt-get install golang-go
 go get -u github.com/cheat/cheat/cmd/cheat
 
 # nvm
-curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.38.0/install.sh | bash
-nvm install ESTABLISHED
+curl -o- -s https://raw.githubusercontent.com/nvm-sh/nvm/v0.38.0/install.sh | bash
+NVM_DIR="$([ -z "${XDG_CONFIG_HOME-}" ] && printf %s "${HOME}/.nvm" || printf %s "${XDG_CONFIG_HOME}/nvm")"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+nvm install stable
+
+# tldr hints
+npm install -g tldr
 
 # hyperfine
 cargo install hyperfine
@@ -57,8 +62,10 @@ cargo install gping
 cargo install procs
 
 # zoxide
-curl -sS https://webinstall.dev/zoxide | bash
+#curl -sS https://webinstall.dev/zoxide | bash
 
 # micro
 curl https://getmic.ro | bash
 mv micro "$HOME/.local/bin"
+
+source "$HOME/.zshrc"
