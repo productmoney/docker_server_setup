@@ -41,7 +41,7 @@ else
     echo "Error: no GH_EMAIL"
     exit 1
   fi
-  if [[ "$GH_EMAIL" == *=* ]]; then
+  if [[ "$GH_EMAIL" == *"="* ]]; then
     section_split "Error: = found in \$GH_EMAIL $GH_EMAIL"
     echo "What is your github login email address?"
     read -r GH_EMAIL
