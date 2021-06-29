@@ -66,14 +66,12 @@ git commit -m "first commit"
 section_split "git remote add origin \"git@github.com:$ORG_NAME/$PROJECT_NAME.git\""
 git remote add origin "git@github.com:$ORG_NAME/$PROJECT_NAME.git"
 
-GITHUB_USERNAME="$(grep "_USERNAME" "$DEFAULT_AUTH_FILE" | cut -d'=' -f2-)"
 GITHUB_AUTH_TOKEN="$(grep "_AUTH_TOKEN" "$DEFAULT_AUTH_FILE" | cut -d'=' -f2-)"
-
-REPO_Q_STRING="{\"name\":\"$PROJECT_NAME\", \"org\": \"$ORG_NAME\", \"type\": \"private\"}"
-REPO_Q_URL="$GH_API/user/repos"
-REPO_AUTH="$GITHUB_USERNAME:$GITHUB_AUTH_TOKEN"
-section_split "curl -i -u \"$REPO_AUTH\" \"$REPO_Q_URL\" -d \"$REPO_Q_STRING\""
-curl -i -u "$REPO_AUTH" "$REPO_Q_URL" -d "$REPO_Q_STRING"
+REPO_Q_STRING="{\"name\":\"$PROJECT_NAME\", \"private\": true}"
+REPO_Q_URL="$GH_API/orgs/$ORG_NAME/repos"
+REPO_AUTH="Authorization: token $GITHUB_AUTH_TOKEN"
+section_split "-H \"$REPO_AUTH\" --data \"$REPO_Q_STRING\" \"$REPO_Q_URL\""
+curl -H "$REPO_AUTH" --data "$REPO_Q_STRING" "$REPO_Q_URL"
 
 section_split "git push -u origin master"
 git push -u origin master
