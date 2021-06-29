@@ -41,8 +41,8 @@ echo "Using \$ORG_NAME $ORG_NAME"
 echo "Using \$PROJECT_NAME $PROJECT_NAME"
 
 SETUP_PROJ="$GH_RAW/$ORG_NAME/docker_server_setup/main"
-section_split "git clone $PROJECT_DOWNLOAD_LOCATION"
-git clone "$PROJECT_DOWNLOAD_LOCATION"
+section_split "git clone $SETUP_PROJ"
+git clone "$SETUP_PROJ"
 
 section_split "mv $BUILD_PROJECT/$PROJECT_FOLDER $PROJECT_NAME"
 mv "$BUILD_PROJECT/$PROJECT_FOLDER" "$PROJECT_NAME"
