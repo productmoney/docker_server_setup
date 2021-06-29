@@ -2,9 +2,12 @@
 
 DEFAULT_ORG_NAME="productmoney"
 
+GH_URL="https://github.com/"
+GH_RAW="https://raw.githubusercontent.com"
+SETUP_PROJ="$GH_RAW/$ORG_NAME/docker_server_setup/main"
+
 BUILD_PROJECT="generate_allomorph"
 PROJECT_FOLDER="project"
-PROJECT_DOWNLOAD_LOCATION="https://github.com/productmoney/$PROJECT_NAME.git"
 
 function section_split() {
   printf "\n----------------------------------------\n%s\n\n" "$1"
@@ -21,6 +24,8 @@ if [ -z "$ORG_NAME" ]; then
   ORG_NAME="$DEFAULT_ORG_NAME"
 fi
 
+PROJECT_DOWNLOAD_LOCATION="$GH_URL/$ORG_NAME/$PROJECT_NAME.git"
+
 section_split "What should the github name of this project be?"
 read -r PROJECT_NAME
 if [ -z "$PROJECT_NAME" ]; then
@@ -30,7 +35,7 @@ fi
 
 AUTH_FOLDER="$HOME/auth"
 DEFAULT_AUTH_FILE="$AUTH_FOLDER/default_auth.txt"
-AUTH_SCRIPT_LOCATION="https://raw.githubusercontent.com/productmoney/docker_server_setup/main/default-auth-setup.sh"
+AUTH_SCRIPT_LOCATION="$SETUP_PROJ/default-auth-setup.sh"
 if [ ! -f "$DEFAULT_AUTH_FILE" ]; then
   bash <(curl -s "$AUTH_SCRIPT_LOCATION")
 fi
@@ -38,6 +43,11 @@ fi
 echo "Using \$ORG_NAME $ORG_NAME"
 echo "Using \$PROJECT_NAME $PROJECT_NAME"
 
+section_split "git clone $PROJECT_DOWNLOAD_LOCATION"
 git clone "$PROJECT_DOWNLOAD_LOCATION"
+
+section_split "mv $BUILD_PROJECT/$PROJECT_FOLDER $PROJECT_NAME"
 mv "$BUILD_PROJECT/$PROJECT_FOLDER" "$PROJECT_NAME"
+
+section_split "rm -rf $BUILD_PROJECT"
 rm -rf "$BUILD_PROJECT"
