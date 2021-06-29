@@ -8,13 +8,14 @@ GITCONFIG="$HOME/.gitconfig"
 
 GITHUB_KEYS="https://api.github.com/user/keys"
 
+mkdir -p "$SSH_DIR"
+
 AUTH_FOLDER="$HOME/auth"
 DEFAULT_AUTH_FILE="$AUTH_FOLDER/default_auth.txt"
 AUTH_SCRIPT_LOCATION="https://raw.githubusercontent.com/productmoney/docker_server_setup/main/default-auth-setup.sh"
-
-mkdir -p "$SSH_DIR"
-
-bash <(curl -s "$AUTH_SCRIPT_LOCATION")
+if [ ! -f "$DEFAULT_AUTH_FILE" ]; then
+  bash <(curl -s "$AUTH_SCRIPT_LOCATION")
+fi
 
 function section_split() {
   printf "\n----------------------------------------\n%s\n\n" "$1"
