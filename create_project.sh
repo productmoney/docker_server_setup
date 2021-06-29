@@ -4,6 +4,7 @@ DEFAULT_ORG_NAME="productmoney"
 
 GH_URL="https://github.com/"
 #GH_RAW="https://raw.githubusercontent.com"
+GH_API="https://api.github.com"
 
 BUILD_PROJECT="generate_allomorph"
 PROJECT_FOLDER="project"
@@ -64,6 +65,9 @@ git commit -m "first commit"
 
 section_split "git remote add origin \"git@github.com:$ORG_NAME/$PROJECT_NAME.git\""
 git remote add origin "git@github.com:$ORG_NAME/$PROJECT_NAME.git"
+
+section_split "curl -u 'USER' \"$GH_API/user/repos\" -d \"{\"name\":\"$PROJECT_NAME\"}\""
+curl -u 'USER' "$GH_API/user/repos" -d "{\"name\":\"$PROJECT_NAME\"}"
 
 section_split "git push -u origin master"
 git push -u origin master
