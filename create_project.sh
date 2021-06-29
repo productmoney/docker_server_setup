@@ -3,7 +3,7 @@
 DEFAULT_ORG_NAME="productmoney"
 
 GH_URL="https://github.com/"
-GH_RAW="https://raw.githubusercontent.com"
+#GH_RAW="https://raw.githubusercontent.com"
 
 BUILD_PROJECT="generate_allomorph"
 PROJECT_FOLDER="project"
@@ -40,7 +40,7 @@ fi
 echo "Using \$ORG_NAME $ORG_NAME"
 echo "Using \$PROJECT_NAME $PROJECT_NAME"
 
-SETUP_PROJ="$GH_RAW/$ORG_NAME/docker_server_setup/main"
+SETUP_PROJ="$GH_URL/$ORG_NAME/$BUILD_PROJECT.git"
 section_split "git clone $SETUP_PROJ"
 git clone "$SETUP_PROJ"
 
@@ -49,3 +49,21 @@ mv "$BUILD_PROJECT/$PROJECT_FOLDER" "$PROJECT_NAME"
 
 section_split "rm -rf $BUILD_PROJECT"
 rm -rf "$BUILD_PROJECT"
+
+section_split "cd $PROJECT_NAME"
+cd "$PROJECT_NAME" || exit 1
+
+section_split "git init"
+git init
+
+section_split "git add README.md"
+git add README.md
+
+section_split 'git commit -m "first commit"'
+git commit -m "first commit"
+
+section_split "git remote add origin \"git@github.com:$ORG_NAME/$PROJECT_NAME.git\""
+git remote add origin "git@github.com:$ORG_NAME/$PROJECT_NAME.git"
+
+section_split "git push -u origin master"
+git push -u origin master
