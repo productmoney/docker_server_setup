@@ -14,7 +14,7 @@ function update_venv() {
     cd "$1" || exit 1
 
     if test -f "$ACTIVATE_LOC"; then
-        section_split "source $ACTIVATE_LOC"
+        echo "source $ACTIVATE_LOC"
         #shellcheck disable=1090
         source "$ACTIVATE_LOC"
 
