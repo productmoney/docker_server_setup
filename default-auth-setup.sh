@@ -1,6 +1,7 @@
 #!/bin/bash
 
-DEFAULT_AUTH_FILE="$HOME/auth/default_auth.txt"
+AUTH_FOLDER="$HOME/auth"
+DEFAULT_AUTH_FILE="$AUTH_FOLDER/default_auth.txt"
 
 AUTH_SCRIPT_LOCATION="https://raw.githubusercontent.com/productmoney/docker_server_setup/main/default-auth-setup.sh"
 
@@ -11,6 +12,8 @@ function section_split() {
 function section_split_plain() {
   printf "\n----------------------------------------\n"
 }
+
+mkdir -p "$AUTH_FOLDER"
 
 if test -f "$DEFAULT_AUTH_FILE"; then
 
@@ -41,11 +44,6 @@ else
     echo "Error: no GH_EMAIL"
     exit 1
   fi
-  if [[ "$GH_EMAIL" == *"="* ]]; then
-    section_split "Error: = found in \$GH_EMAIL $GH_EMAIL"
-    echo "What is your github login email address?"
-    read -r GH_EMAIL
-  fi
 
   echo "What is your github username?"
   read -r GH_USERNAME
@@ -53,22 +51,13 @@ else
     echo "Error: no GH_USERNAME"
     exit 1
   fi
-  if [[ "$GH_USERNAME" == *=* ]]; then
-    section_split "Error: = found in \$GH_USERNAME $GH_USERNAME"
-    echo "What is your github username?"
-    read -r GH_USERNAME
-  fi
 
   echo "What is your github auth token?"
+  echo "(If you don't have one, can create at https://github.com/settings/tokens being sure to include the right permissions)"
   read -r GH_AUTH_TOKEN
   if [ -z "$GH_AUTH_TOKEN" ]; then
     echo "Error: no GH_AUTH_TOKEN"
     exit 1
-  fi
-  if [[ "$GH_AUTH_TOKEN" == *=* ]]; then
-    section_split "Error: = found in \$GH_AUTH_TOKEN $GH_AUTH_TOKEN"
-    echo "What is your github auth token?"
-    read -r GH_AUTH_TOKEN
   fi
 
   echo "What is your current jwt auth parent key for davs apis?"
@@ -77,22 +66,16 @@ else
     echo "Error: no JWT_SIGNING_KEY"
     exit 1
   fi
-  if [[ "$JWT_SIGNING_KEY" == *=* ]]; then
-    section_split "Error: = found in \$JWT_SIGNING_KEY $JWT_SIGNING_KEY"
-    echo "What is your current jwt auth parent key for davs apis?"
-    read -r JWT_SIGNING_KEY
-  fi
 
-  DF_AUTH_FILE_TEXT="JWT_SIGNING_KEY=$JWT_SIGNING_KEY
-GH_AUTH_TOKEN=$GH_AUTH_TOKEN
+  DF_AUTH_FILE_TEXT="GH_AUTH_TOKEN=$GH_AUTH_TOKEN
 GH_EMAIL=$GH_EMAIL
-GH_USERNAME=$GH_USERNAME"
+GH_USERNAME=$GH_USERNAME
+JWT_SIGNING_KEY=$JWT_SIGNING_KEY"
 
   section_split "Writing $DEFAULT_AUTH_FILE with:"
   echo "$DF_AUTH_FILE_TEXT" | tee -a "$DEFAULT_AUTH_FILE"
 
 fi
-
 
 section_split "$DEFAULT_AUTH_FILE written as:"
 cat "$DEFAULT_AUTH_FILE"

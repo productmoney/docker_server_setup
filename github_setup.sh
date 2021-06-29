@@ -1,29 +1,20 @@
 #!/bin/bash
 
-USERS_HOME_FOLDER="$HOME"
-
-echo ""
-echo "Please enter your github username:"
-read -r GITHUB_USERNAME
-
-echo ""
-echo "Please enter your github email:"
-read -r GITHUB_EMAIL
-
-echo ""
-echo "Please enter your github auth token:"
-echo "(If you don't have one, can create at https://github.com/settings/tokens being sure to include the right permissions)"
-read -r GITHUB_AUTH_TOKEN
-
-SSH_DIR="$USERS_HOME_FOLDER/.ssh"
+SSH_DIR="$HOME/.ssh"
 SSH_ID_RSA="$SSH_DIR/id_rsa"
 SSH_ID_RSA_PUB="$SSH_ID_RSA.pub"
 SSH_CONFIG="$SSH_DIR/config"
-GITCONFIG="$USERS_HOME_FOLDER/.gitconfig"
+GITCONFIG="$HOME/.gitconfig"
 
 GITHUB_KEYS="https://api.github.com/user/keys"
 
+AUTH_FOLDER="$HOME/auth"
+DEFAULT_AUTH_FILE="$AUTH_FOLDER/default_auth.txt"
+AUTH_SCRIPT_LOCATION="https://raw.githubusercontent.com/productmoney/docker_server_setup/main/default-auth-setup.sh"
+
 mkdir -p "$SSH_DIR"
+
+bash <(curl -s "$AUTH_SCRIPT_LOCATION")
 
 function section_split() {
   printf "\n----------------------------------------\n%s\n\n" "$1"
@@ -32,6 +23,12 @@ function section_split() {
 function section_split_plain() {
   printf "\n----------------------------------------\n"
 }
+
+GITHUB_USERNAME="$(grep "_USERNAME" "$DEFAULT_AUTH_FILE" | cut -d'=' -f2-)"
+
+GITHUB_EMAIL="$(grep "_EMAIL" "$DEFAULT_AUTH_FILE" | cut -d'=' -f2-)"
+
+GITHUB_AUTH_TOKEN="$(grep "_AUTH_TOKEN" "$DEFAULT_AUTH_FILE" | cut -d'=' -f2-)"
 
 HOSTNAME=$(hostname)
 echo "Key will have the name: $HOSTNAME (from using command hostname)"
