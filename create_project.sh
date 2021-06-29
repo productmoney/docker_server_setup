@@ -4,7 +4,6 @@ DEFAULT_ORG_NAME="productmoney"
 
 GH_URL="https://github.com/"
 GH_RAW="https://raw.githubusercontent.com"
-SETUP_PROJ="$GH_RAW/$ORG_NAME/docker_server_setup/main"
 
 BUILD_PROJECT="generate_allomorph"
 PROJECT_FOLDER="project"
@@ -24,8 +23,6 @@ if [ -z "$ORG_NAME" ]; then
   ORG_NAME="$DEFAULT_ORG_NAME"
 fi
 
-PROJECT_DOWNLOAD_LOCATION="$GH_URL/$ORG_NAME/$PROJECT_NAME.git"
-
 section_split "What should the github name of this project be?"
 read -r PROJECT_NAME
 if [ -z "$PROJECT_NAME" ]; then
@@ -43,6 +40,7 @@ fi
 echo "Using \$ORG_NAME $ORG_NAME"
 echo "Using \$PROJECT_NAME $PROJECT_NAME"
 
+SETUP_PROJ="$GH_RAW/$ORG_NAME/docker_server_setup/main"
 section_split "git clone $PROJECT_DOWNLOAD_LOCATION"
 git clone "$PROJECT_DOWNLOAD_LOCATION"
 
