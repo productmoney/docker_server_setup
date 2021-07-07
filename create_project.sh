@@ -1,7 +1,5 @@
 #!/bin/bash
 
-DEFAULT_ORG_NAME="productmoney"
-
 GH_URL="https://github.com/"
 #GH_RAW="https://raw.githubusercontent.com"
 GH_API="https://api.github.com"
@@ -17,12 +15,17 @@ function section_split_plain() {
   printf "\n----------------------------------------\n"
 }
 
-section_split "What is your github organization?"
-echo "If blank, will default to $DEFAULT_ORG_NAME"
-read -r ORG_NAME
-if [ -z "$ORG_NAME" ]; then
-  ORG_NAME="$DEFAULT_ORG_NAME"
+AUTH_FOLDER="$HOME/auth"
+DEFAULT_AUTH_FILE="$AUTH_FOLDER/default_auth.txt"
+DEFUALT_ORG="productmoney"
+SETUP_PROJ="$GH_URL/$DEFUALT_ORG/$BUILD_PROJECT.git"
+AUTH_SCRIPT_LOCATION="$SETUP_PROJ/default-auth-setup.sh"
+if [ ! -f "$DEFAULT_AUTH_FILE" ]; then
+  section_split "bash <(curl -s $AUTH_SCRIPT_LOCATION)"
+  bash <(curl -s "$AUTH_SCRIPT_LOCATION")
 fi
+
+ORG_NAME="$(grep "ORG_NAME" "$DEFAULT_AUTH_FILE" | cut -d'=' -f2-)"
 
 section_split "What should the github name of this project be?"
 read -r PROJECT_NAME
@@ -31,25 +34,24 @@ if [ -z "$PROJECT_NAME" ]; then
   exit 1
 fi
 
-AUTH_FOLDER="$HOME/auth"
-DEFAULT_AUTH_FILE="$AUTH_FOLDER/default_auth.txt"
-AUTH_SCRIPT_LOCATION="$SETUP_PROJ/default-auth-setup.sh"
-if [ ! -f "$DEFAULT_AUTH_FILE" ]; then
-  bash <(curl -s "$AUTH_SCRIPT_LOCATION")
-fi
-
 echo "Using \$ORG_NAME $ORG_NAME"
 echo "Using \$PROJECT_NAME $PROJECT_NAME"
 
-SETUP_PROJ="$GH_URL/$ORG_NAME/$BUILD_PROJECT.git"
-section_split "git clone $SETUP_PROJ"
-git clone "$SETUP_PROJ"
+if [ -d "$SETUP_PROJ" ]; then
+  section_split "cd $SETUP_PROJ"
+  cd "$SETUP_PROJ" || exit 1
+  echo "git pull"
+  git pull
+  echo "cd .."
+  cd .. || exit 1
+else
+  SETUP_PROJ="$GH_URL/$ORG_NAME/$BUILD_PROJECT.git"
+  section_split "git clone $SETUP_PROJ"
+  git clone "$SETUP_PROJ"
+fi
 
-section_split "mv $BUILD_PROJECT/$PROJECT_FOLDER $PROJECT_NAME"
+section_split "cp -r $BUILD_PROJECT/$PROJECT_FOLDER $PROJECT_NAME"
 mv "$BUILD_PROJECT/$PROJECT_FOLDER" "$PROJECT_NAME"
-
-section_split "rm -rf $BUILD_PROJECT"
-rm -rf "$BUILD_PROJECT"
 
 section_split "cd $PROJECT_NAME"
 cd "$PROJECT_NAME" || exit 1
@@ -75,3 +77,5 @@ curl -H "$REPO_AUTH" --data "$REPO_Q_STRING" "$REPO_Q_URL"
 
 section_split "git push -u origin master"
 git push -u origin master
+
+section_split "Updating project"

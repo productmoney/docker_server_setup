@@ -67,9 +67,18 @@ else
     exit 1
   fi
 
-  DF_AUTH_FILE_TEXT="GH_AUTH_TOKEN=$GH_AUTH_TOKEN
-GH_EMAIL=$GH_EMAIL
+  DEFAULT_ORG_NAME="productmoney"
+  section_split "What is your github organization (like in the url)?"
+  echo "If blank, will default to $DEFAULT_ORG_NAME"
+  read -r ORG_NAME
+  if [ -z "$ORG_NAME" ]; then
+    ORG_NAME="$DEFAULT_ORG_NAME"
+  fi
+
+  DF_AUTH_FILE_TEXT="GH_EMAIL=$GH_EMAIL
 GH_USERNAME=$GH_USERNAME
+ORG_NAME=$ORG_NAME
+GH_AUTH_TOKEN=$GH_AUTH_TOKEN
 JWT_SIGNING_KEY=$JWT_SIGNING_KEY"
 
   section_split "Writing $DEFAULT_AUTH_FILE with:"
