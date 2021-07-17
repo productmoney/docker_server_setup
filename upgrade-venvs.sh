@@ -2,7 +2,7 @@
 
 PACKAGE_LOC="../packages/allomorph_requirements.txt"
 ACTIVATE_LOC="bin/activate"
-USER_VENV_LOC="$HOME/venv/python"
+USER_VENV_LOC="$HOME/venv/"
 
 function section_split() {
   printf "\n----------------------------------------\n%s\n\n" "$1"
@@ -30,7 +30,7 @@ function update_venv() {
     fi
 }
 
-for i in "$USER_VENV_LOC"*; do
+for i in "$USER_VENV_LOC"*python*; do
     update_venv "$i"
 done
 
