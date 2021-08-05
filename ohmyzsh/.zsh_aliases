@@ -108,7 +108,7 @@ alias dkrmiall='f() { docker rmi $(docker images -q) };f'
 
 alias remove-old-snaps='f() { sudo snap list --all | while read snapname ver rev trk pub notes; do if [[ $notes = *disabled* ]]; then sudo snap remove "$snapname" --revision="$rev"; fi; done };f'
 
-alias ls='lsd'
+#alias ls='lsd'
 alias l='lsd -l'
 alias lls='exa -al --sort=size'
 alias lla='exa -al --sort=accessed'
