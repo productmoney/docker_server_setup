@@ -56,7 +56,7 @@ export UPDATE_ZSH_DAYS=10
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(git docker python grunt gulp nmap git-extras ssh-agent ubuntu common-aliases dirhistory colorize colored-man-pages copybuffer copydir copyfile django extract jsontools pip python sudo themes wd zsh_reload)
+plugins=(git docker python grunt gulp nmap git-extras ssh-agent ubuntu common-aliases dirhistory colorize colored-man-pages copybuffer copydir copyfile django extract jsontools pip python sudo themes wd)
 
 # User configuration
 
@@ -91,14 +91,14 @@ source $ZSH/oh-my-zsh.sh
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 
-eval "$(mcfly init zsh)"
-export MCFLY_FUZZY=true
-export MCFLY_RESULTS=20
+#eval "$(mcfly init zsh)"
+#export MCFLY_FUZZY=true
+#export MCFLY_RESULTS=20
 
 # export NVM_DIR="$([ -z "${XDG_CONFIG_HOME-}" ] && printf %s "${HOME}/.nvm" || printf %s "${XDG_CONFIG_HOME}/nvm")"
 # [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" # This loads nvm
 
-eval "$(zoxide init zsh)"
+#eval "$(zoxide init zsh)"
 
 if [[ -e "$HOME/.zsh_aliases" ]]; then
   . "$HOME/.zsh_aliases"
