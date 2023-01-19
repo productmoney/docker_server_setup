@@ -56,7 +56,7 @@ export UPDATE_ZSH_DAYS=10
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(git docker python grunt gulp nmap git-extras ssh-agent ubuntu common-aliases dirhistory colorize colored-man-pages copybuffer copydir copyfile extract jsontools pip python sudo themes wd)
+plugins=(git docker python grunt gulp nmap git-extras ssh-agent ubuntu common-aliases dirhistory colorize colored-man-pages copybuffer copyfile extract jsontools pip python sudo themes wd)
 
 # User configuration
 
