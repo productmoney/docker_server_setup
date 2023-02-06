@@ -307,3 +307,11 @@ echo "git clone https://github.com/productmoney/docker_3proxy_installer.git"
 git clone "https://github.com/productmoney/docker_3proxy_installer.git"
 
 cd docker_3proxy_installer
+
+#Doppler
+echo "-sLf --retry 3 --tlsv1.2 --proto \"=https\" 'https://packages.doppler.com/public/cli/gpg.DE2A7741A397C129.key' | sudo apt-key add -"
+curl -sLf --retry 3 --tlsv1.2 --proto "=https" 'https://packages.doppler.com/public/cli/gpg.DE2A7741A397C129.key' | sudo apt-key add -
+echo "\"deb https://packages.doppler.com/public/cli/deb/debian any-version main\" | sudo tee /etc/apt/sources.list.d/doppler-cli.list"
+echo "deb https://packages.doppler.com/public/cli/deb/debian any-version main" | sudo tee /etc/apt/sources.list.d/doppler-cli.list
+echo "sudo apt-get update && sudo apt-get install doppler"
+sudo apt-get update && sudo apt-get install doppler
