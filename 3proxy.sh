@@ -22,8 +22,8 @@ apt-get update
 section_split "apt-get upgrade -y"
 apt-get upgrade -y
 
-section_split "apt-get install -y --no-install-recommends curl jq git ntp zsh apt-transport-https ca-certificates dnsutils apt-transport-https gnupg lsb-release"
-apt-get install -y --no-install-recommends curl jq git ntp zsh apt-transport-https ca-certificates dnsutils apt-transport-https gnupg lsb-release
+section_split "apt-get install -y --no-install-recommends curl jq ifupdown git ntp zsh apt-transport-https ca-certificates dnsutils apt-transport-https gnupg lsb-release"
+apt-get install -y --no-install-recommends curl jq git ntp zsh ifupdown apt-transport-https ca-certificates dnsutils apt-transport-https gnupg lsb-release
 
 section_split "Setting file limits"
 
