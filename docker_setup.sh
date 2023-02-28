@@ -19,13 +19,15 @@ section_split "apt-get install -y --no-install-recommends
   ca-certificates
   curl
   gnupg
-  lsb-release"
+  lsb-release
+  net-tools"
 apt-get install -y --no-install-recommends \
   apt-transport-https \
   ca-certificates \
   curl \
   gnupg \
-  lsb-release
+  lsb-release \
+  net-tools
 
 
 DOCKER_SOURCES_LIST="/etc/apt/sources.list.d/docker.list"

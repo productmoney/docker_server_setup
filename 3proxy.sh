@@ -315,3 +315,10 @@ echo "\"deb https://packages.doppler.com/public/cli/deb/debian any-version main\
 echo "deb https://packages.doppler.com/public/cli/deb/debian any-version main" | sudo tee /etc/apt/sources.list.d/doppler-cli.list
 echo "sudo apt-get update && sudo apt-get install doppler"
 sudo apt-get update && sudo apt-get install doppler
+
+if [ -x "$(command -v gotop)" ]; then
+  : # gotop already setup
+else
+  echo "bash <(curl -s \"https://raw.githubusercontent.com/productmoney/docker_server_setup/main/monitors/gotop-setup.sh\")"
+  bash <(curl -s "https://raw.githubusercontent.com/productmoney/docker_server_setup/main/monitors/gotop-setup.sh")
+fi
