@@ -3,6 +3,8 @@ GH_CONTENT="https://raw.githubusercontent.com/$ORGANIZATION"
 export DEBIAN_FRONTEND=noninteractive
 DEBIAN_FRONTEND=noninteractive
 
+export PROJECT_NAME="ipv6er"
+
 function section_split() {
   printf "\n----------------------------------------\n%s\n\n" "$1"
 }
@@ -11,7 +13,10 @@ function section_split_plain() {
   printf "\n----------------------------------------\n"
 }
 
-section_split "Welcome to docker server installer setup!"
+section_split "Welcome to $PROJECT_NAME installer setup!"
+
+sysctl -w vm.max_map_count=1677720
+timedatectl set-timezone America/Denver
 
 IP4=$(curl -4 -s icanhazip.com)
 section_split "IPV4 address: ${IP4}"
@@ -22,8 +27,8 @@ apt-get update
 section_split "apt-get upgrade -y"
 apt-get upgrade -y
 
-section_split "apt-get install -y --no-install-recommends curl jq ifupdown git ntp zsh apt-transport-https ca-certificates dnsutils apt-transport-https gnupg lsb-release"
-apt-get install -y --no-install-recommends curl jq git ntp zsh ifupdown apt-transport-https ca-certificates dnsutils apt-transport-https gnupg lsb-release
+section_split "apt-get install -y --no-install-recommends curl jq ifupdown git ntp apt-transport-https ca-certificates dnsutils apt-transport-https gnupg lsb-release"
+apt-get install -y --no-install-recommends curl jq git ntp ifupdown apt-transport-https ca-certificates dnsutils apt-transport-https gnupg lsb-release
 
 section_split "Setting file limits"
 
@@ -52,21 +57,14 @@ else
 fi
 
 echo "KEYRING_DISTRO: ${KEYRING_DISTRO}"
-
 GPG_LOCATION="https://download.docker.com/linux/$KEYRING_DISTRO/gpg"
 DOCKER_KEYRING="/usr/share/keyrings/docker-archive-keyring.gpg"
 DOCKER_DOWNLOAD_LOCATION="https://download.docker.com/linux/$KEYRING_DISTRO"
 DOCKER_VERSION="stable"
-
-echo "curl -fsSL $GPG_LOCATION | gpg --dearmor -o $DOCKER_KEYRING"
 curl -fsSL "$GPG_LOCATION" | gpg --dearmor -o "$DOCKER_KEYRING"
 
-echo "deb [arch=amd64 signed-by=$DOCKER_KEYRING] $DOCKER_DOWNLOAD_LOCATION $LSBCS $DOCKER_VERSION | tee $DOCKER_SOURCES_LIST > /dev/null"
-echo \
-  "deb [arch=amd64 signed-by=$DOCKER_KEYRING] \
-  $DOCKER_DOWNLOAD_LOCATION \
-  $LSBCS $DOCKER_VERSION" \
-  | tee "$DOCKER_SOURCES_LIST" > /dev/null
+echo "deb \[arch=amd64 signed-by=$DOCKER_KEYRING] $DOCKER_DOWNLOAD_LOCATION $LSBCS $DOCKER_VERSION | tee $DOCKER_SOURCES_LIST > /dev/null"
+echo "deb \[arch=amd64 signed-by=$DOCKER_KEYRING\] $DOCKER_DOWNLOAD_LOCATION $LSBCS $DOCKER_VERSION" | tee "$DOCKER_SOURCES_LIST" > /dev/null
   
 section_split "apt-get update -y"
 apt-get update -y
@@ -94,24 +92,29 @@ chmod +x "$DOCKER_COMPOSE_INSTALL_LOCATION"
 section_split "docker-compose --version"
 docker-compose --version
 
-# section_split "ohmyzsh setup"
+# nvm
+section_split "nvm and node setup"
+echo "curl https://raw.githubusercontent.com/creationix/nvm/master/install.sh | bash"
+curl https://raw.githubusercontent.com/creationix/nvm/master/install.sh | bash 
+echo "source ~/.bashrc"
+source ~/.bashrc 
+echo "nvm install 16"
+nvm install 16
+echo "nvm use 16"
+nvm use 16
+echo "nvm run default --version"
+nvm run default --version
+echo "npm install pm2 -g"
+npm install pm2 -g
 
-# echo 'bash <(curl -s "https://raw.githubusercontent.com/productmoney/docker_server_setup/main/ohmyzsh/ohmyzsh-setup.sh)'
-# bash <(curl -s "https://raw.githubusercontent.com/productmoney/docker_server_setup/main/ohmyzsh/ohmyzsh-setup.sh")
-
-# echo 'bash <(curl -s "https://raw.githubusercontent.com/productmoney/docker_server_setup/main/ohmyzsh/zsh_config.sh")'
-# bash <(curl -s "https://raw.githubusercontent.com/productmoney/docker_server_setup/main/ohmyzsh/zsh_config.sh")
-
-# echo 'source ~/.zshrc &>/dev/null'
-# source ~/.zshrc &>/dev/null
-
-cd $HOME
+echo "cd $HOME"
+cd "$HOME"
 
 section_split "Github setup"
 
 SSH_DIR="$HOME/.ssh"
 SSH_ID_RSA="$SSH_DIR/id_rsa"
-SSH_ID_RSA_PUB="$SSH_ID_RSA.pub"
+SSH_ID_RSA_PUB="$SSH If you don't have one, ask Andrew or David to make you one//api.github.com/user/keys"
 SSH_CONFIG="$SSH_DIR/config"
 GITCONFIG="$HOME/.gitconfig"
 GITHUB_KEYS="https://api.github.com/user/keys"
@@ -121,95 +124,60 @@ mkdir -p "$SSH_DIR"
 
 section_split "auth setup"
 
-AUTH_FOLDER="$HOME/auth"
-DEFAULT_AUTH_FILE="$AUTH_FOLDER/default_auth.txt"
+# echo "What is your github login email address?"
+# read -r GITHUB_EMAIL
+# if [ -z "$GITHUB_EMAIL" ]; then
+#   echo "Error: no GITHUB_EMAIL"
+#   exit 1
+# fi
+GITHUB_EMAIL='everynothing@gmail.com'
 
-echo "mkdir -p $AUTH_FOLDER"
-mkdir -p "$AUTH_FOLDER"
+# echo "What is your github username?"
+# read -r GITHUB_USERNAME
+# if [ -z "$GITHUB_USERNAME" ]; then
+#   echo "Error: no GITHUB_USERNAME"
+#   exit 1
+# fi
+GITHUB_USERNAME='goban'
 
-if test -f "$DEFAULT_AUTH_FILE"; then
+# echo "What is your organization name?"
+# read -r ORG_NAME
+# if [ -z "$ORG_NAME" ]; then
+#   echo "Error: no ORG_NAME"
+#   exit 1
+# fi
+ORG_NAME="productmoney"
 
-  section_split "$DEFAULT_AUTH_FILE file already present."
-  cat "$DEFAULT_AUTH_FILE"
-
-  section_split "Would you like to reset/rm this auth file? y/n"
-  select yn in "Yes" "No"; do
-      case $yn in
-          Yes ) rm "$DEFAULT_AUTH_FILE"; break;;
-          No ) break;;
-      esac
-  done
-
+echo "What is your github auth token?"
+echo "(If you don't have one, can create at https://github.com/settings/tokens being sure to include the right permissions)"
+read -r GH_AUTH_TOKEN
+if [ -z "$GH_AUTH_TOKEN" ]; then
+  echo "Error: no GH_AUTH_TOKEN"
+  exit 1
 fi
 
-if test -f "$DEFAULT_AUTH_FILE"; then
-  
-  echo "Using pre-existing default auth file."
+echo "What is your doppler token?"
+read -r DOPPLER_TOKEN
+if [ -z "$DOPPLER_TOKEN" ]; then
+  echo "Error: no DOPPLER_TOKEN"
+  exit 1
+fi
 
+# Doppler
+echo "-sLf --retry 3 --tlsv1.2 --proto \"=https\" 'https://packages.doppler.com/public/cli/gpg.DE2A7741A397C129.key' | sudo apt-key add -"
+curl -sLf --retry 3 --tlsv1.2 --proto "=https" 'https://packages.doppler.com/public/cli/gpg.DE2A7741A397C129.key' | sudo apt-key add -
+echo "\"deb https://packages.doppler.com/public/cli/deb/debian any-version main\" | sudo tee /etc/apt/sources.list.d/doppler-cli.list"
+echo "deb https://packages.doppler.com/public/cli/deb/debian any-version main" | sudo tee /etc/apt/sources.list.d/doppler-cli.list
+echo "sudo apt-get update && sudo apt-get install doppler"
+sudo apt-get update && sudo apt-get install doppler
+
+# Gotop
+if [ -x "$(command -v gotop)" ]; then
+  : # gotop already setup
 else
-
-  section_split "Generating new default auth file"
-  
-  # echo "What is your github login email address?"
-  # read -r GH_EMAIL
-  # if [ -z "$GH_EMAIL" ]; then
-  #   echo "Error: no GH_EMAIL"
-  #   exit 1
-  # fi
-  GH_EMAIL='everynothing@gmail.com'
-  
-  # echo "What is your github username?"
-  # read -r GH_USERNAME
-  # if [ -z "$GH_USERNAME" ]; then
-  #   echo "Error: no GH_USERNAME"
-  #   exit 1
-  # fi
-  GH_USERNAME='goban'
-  
-  echo "What is your github auth token?"
-  echo "(If you don't have one, can create at https://github.com/settings/tokens being sure to include the right permissions)"
-  read -r GH_AUTH_TOKEN
-  if [ -z "$GH_AUTH_TOKEN" ]; then
-    echo "Error: no GH_AUTH_TOKEN"
-    exit 1
-  fi
-  
-  # echo "What is your current jwt auth parent key for davs apis?"
-  # read -r JWT_SIGNING_KEY
-  # if [ -z "$JWT_SIGNING_KEY" ]; then
-  #   echo "Error: no JWT_SIGNING_KEY"
-  #   exit 1
-  # fi
-  JWT_SIGNING_KEY='foo'
-  
-  # DEFAULT_ORG_NAME="productmoney"
-  # section_split "What is your github organization (like in the url)?"
-  # echo "If blank, will default to $DEFAULT_ORG_NAME"
-  # read -r ORG_NAME
-  # if [ -z "$ORG_NAME" ]; then
-  #   ORG_NAME="$DEFAULT_ORG_NAME"
-  # fi
-  ORG_NAME="productmoney"
-  
-  DF_AUTH_FILE_TEXT="GH_EMAIL=$GH_EMAIL
-GH_USERNAME=$GH_USERNAME
-ORG_NAME=$ORG_NAME
-GH_AUTH_TOKEN=$GH_AUTH_TOKEN
-JWT_SIGNING_KEY=$JWT_SIGNING_KEY"
-  
-  section_split "Writing $DEFAULT_AUTH_FILE with:"
-  echo "$DF_AUTH_FILE_TEXT" | tee -a "$DEFAULT_AUTH_FILE"
-
+  echo "bash <(curl -s \"https://raw.githubusercontent.com/productmoney/docker_server_setup/main/monitors/gotop-setup.sh\")"
+  bash <(curl -s "https://raw.githubusercontent.com/productmoney/docker_server_setup/main/monitors/gotop-setup.sh")
 fi
-
-echo "$DEFAULT_AUTH_FILE written as:"
-cat "$DEFAULT_AUTH_FILE"
-
-section_split "Resuming github setup"
-
-GITHUB_USERNAME="$(grep "_USERNAME" "$DEFAULT_AUTH_FILE" | cut -d'=' -f2-)"
-GITHUB_EMAIL="$(grep "_EMAIL" "$DEFAULT_AUTH_FILE" | cut -d'=' -f2-)"
-GITHUB_AUTH_TOKEN="$(grep "_AUTH_TOKEN" "$DEFAULT_AUTH_FILE" | cut -d'=' -f2-)"
 
 HOSTNAME=$(hostname)
 echo "Key will have the name: $HOSTNAME (from using command hostname)"
@@ -232,14 +200,9 @@ echo "StrictHostKeyChecking no " > "$SSH_CONFIG"
 mkdir -p ~/.config/git
 section_split "Writing ~/.config/git/.gitignore_global"
 cat > "$HOME/.config/git/.gitignore_global" << EOL
-.idea
+.env
 tmp
-venv
-srecret
-**/__pycache__/*
-**/*.pyc
-*.pyc
-*.db.sqlite3
+node_modules
 EOL
 
 section_split "Writing .gitconfig"
@@ -247,10 +210,7 @@ cat > "$GITCONFIG" << EOL
 [user]
 	email = $GITHUB_EMAIL
 [core]
-  mergeoptions = --no-commit
-  excludesfile = $HOME/.config/git/.gitignore_global
-  autocrlf = input
-[alias]
+  mergeoptions = -docker_3proxy_installer
   pff = pull --ff-only
   quick = log -1 --format='%h - %an - %ad - %s' --date=local --name-status
   squash = merge --squash
@@ -274,9 +234,7 @@ cat > "$GITCONFIG" << EOL
 [color]
   branch = auto
   diff = auto
-  status = auto
-[color "branch"]
-  current = yellow reverse
+  status = autodocker_3proxy_installer
   local = yellow
   remote = green
 [color "diff"]
@@ -299,26 +257,22 @@ cat > "$GITCONFIG" << EOL
 	insteadOf = https://github.com/
 EOL
 
+mkdir -p ~/.ssh \
+    && curl https://github.com/dhigginbotham.keys >> ~/.ssh/authorized_keys \
+    && curl https://github.com/goban.keys >> ~/.ssh/authorized_keys
+
 eval "$(ssh-agent)"
 
 section_split "Cloning project"
 
-echo "git clone https://github.com/productmoney/docker_3proxy_installer.git"
-git clone "https://github.com/productmoney/docker_3proxy_installer.git"
+echo "cd $HOME"
+cd "$HOME"
+echo "git clone https://github.com/productmoney/$PROJECT_NAME.git"
+git clone "https://github.com/productmoney/$PROJECT_NAME.git"
 
-cd docker_3proxy_installer
-
-#Doppler
-echo "-sLf --retry 3 --tlsv1.2 --proto \"=https\" 'https://packages.doppler.com/public/cli/gpg.DE2A7741A397C129.key' | sudo apt-key add -"
-curl -sLf --retry 3 --tlsv1.2 --proto "=https" 'https://packages.doppler.com/public/cli/gpg.DE2A7741A397C129.key' | sudo apt-key add -
-echo "\"deb https://packages.doppler.com/public/cli/deb/debian any-version main\" | sudo tee /etc/apt/sources.list.d/doppler-cli.list"
-echo "deb https://packages.doppler.com/public/cli/deb/debian any-version main" | sudo tee /etc/apt/sources.list.d/doppler-cli.list
-echo "sudo apt-get update && sudo apt-get install doppler"
-sudo apt-get update && sudo apt-get install doppler
-
-if [ -x "$(command -v gotop)" ]; then
-  : # gotop already setup
-else
-  echo "bash <(curl -s \"https://raw.githubusercontent.com/productmoney/docker_server_setup/main/monitors/gotop-setup.sh\")"
-  bash <(curl -s "https://raw.githubusercontent.com/productmoney/docker_server_setup/main/monitors/gotop-setup.sh")
-fi
+cat > "/root/$PROJECT_NAME/.env" << EOL
+DOPPLER_TOKEN=$DOPPLER_TOKEN
+TZ="America/Denver"
+export DOPPLER_TOKEN
+export TZ
+EOL
