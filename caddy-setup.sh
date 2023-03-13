@@ -7,14 +7,8 @@ CADDY_DIR="$HOME/hosting/caddy"
 CADDYFILE="$CADDY_DIR/Caddyfile"
 STARTING_CADDYFILE=""
 
-
-function section_split() {
-  printf "\n----------------------------------------\n%s\n\n" "$1"
-}
-
-function section_split_plain() {
-  printf "\n----------------------------------------\n"
-}
+function section_split() { printf "\n$(seq -s= $(($COLUMNS-1))|tr -d '[:digit:]')\n%s\n\n" "$1" ; }
+function section_split_plain() { printf "\n$(seq -s= $(($COLUMNS-1))|tr -d '[:digit:]')\n" ; }
 
 # Make sure docker properly installed
 if [ -x "$(command -v caddy)" ]; then

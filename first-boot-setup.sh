@@ -18,13 +18,8 @@ function run_setup_script(){
   run_pm_github_script "docker_server_setup" "$1"
 }
 
-function section_split() {
-  printf "\n----------------------------------------\n%s\n\n" "$1"
-}
-
-function section_split_plain() {
-  printf "\n----------------------------------------\n"
-}
+function section_split() { printf "\n$(seq -s= $(($COLUMNS-1))|tr -d '[:digit:]')\n%s\n\n" "$1" ; }
+function section_split_plain() { printf "\n$(seq -s= $(($COLUMNS-1))|tr -d '[:digit:]')\n" ; }
 
 section_split "Welcome to docker server installer setup!"
 

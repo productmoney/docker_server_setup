@@ -7,13 +7,8 @@ GH_API="https://api.github.com"
 BUILD_PROJECT="generate_allomorph"
 PROJECT_FOLDER="project"
 
-function section_split() {
-  printf "\n----------------------------------------\n%s\n\n" "$1"
-}
-
-function section_split_plain() {
-  printf "\n----------------------------------------\n"
-}
+function section_split() { printf "\n$(seq -s= $(($COLUMNS-1))|tr -d '[:digit:]')\n%s\n\n" "$1" ; }
+function section_split_plain() { printf "\n$(seq -s= $(($COLUMNS-1))|tr -d '[:digit:]')\n" ; }
 
 AUTH_FOLDER="$HOME/auth"
 DEFAULT_AUTH_FILE="$AUTH_FOLDER/default_auth.txt"

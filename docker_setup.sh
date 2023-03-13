@@ -5,13 +5,8 @@ USER=$1
 export DEBIAN_FRONTEND=noninteractive
 DEBIAN_FRONTEND=noninteractive
 
-function section_split() {
-  printf "\n----------------------------------------\n%s\n\n" "$1"
-}
-
-function section_split_plain() {
-  printf "\n----------------------------------------\n"
-}
+function section_split() { printf "\n$(seq -s= $(($COLUMNS-1))|tr -d '[:digit:]')\n%s\n\n" "$1" ; }
+function section_split_plain() { printf "\n$(seq -s= $(($COLUMNS-1))|tr -d '[:digit:]')\n" ; }
 
 # Install Dependencies
 section_split "apt-get install -y --no-install-recommends

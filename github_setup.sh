@@ -17,13 +17,8 @@ if [ ! -f "$DEFAULT_AUTH_FILE" ]; then
   bash <(curl -s "$AUTH_SCRIPT_LOCATION")
 fi
 
-function section_split() {
-  printf "\n----------------------------------------\n%s\n\n" "$1"
-}
-
-function section_split_plain() {
-  printf "\n----------------------------------------\n"
-}
+function section_split() { printf "\n$(seq -s= $(($COLUMNS-1))|tr -d '[:digit:]')\n%s\n\n" "$1" ; }
+function section_split_plain() { printf "\n$(seq -s= $(($COLUMNS-1))|tr -d '[:digit:]')\n" ; }
 
 GITHUB_USERNAME="$(grep "_USERNAME" "$DEFAULT_AUTH_FILE" | cut -d'=' -f2-)"
 
