@@ -5,13 +5,9 @@ DEBIAN_FRONTEND=noninteractive
 
 export PROJECT_NAME="ipv6er"
 
-function section_split() {
-  printf "\n----------------------------------------\n%s\n\n" "$1"
-}
-
-function section_split_plain() {
-  printf "\n----------------------------------------\n"
-}
+DIVIDER=$(seq -s= $(($COLUMNS-1))|tr -d '[:digit:]')
+function section_split() { printf "\n$DIVIDER\n%s\n\n" "$1" ; }
+function section_split_plain() { printf "\n$DIVIDER\n" ; }
 
 section_split "Welcome to $PROJECT_NAME installer setup!"
 
@@ -64,7 +60,7 @@ DOCKER_VERSION="stable"
 curl -fsSL "$GPG_LOCATION" | gpg --dearmor -o "$DOCKER_KEYRING"
 
 echo "deb \[arch=amd64 signed-by=$DOCKER_KEYRING] $DOCKER_DOWNLOAD_LOCATION $LSBCS $DOCKER_VERSION | tee $DOCKER_SOURCES_LIST > /dev/null"
-echo "deb \[arch=amd64 signed-by=$DOCKER_KEYRING\] $DOCKER_DOWNLOAD_LOCATION $LSBCS $DOCKER_VERSION" | tee "$DOCKER_SOURCES_LIST" > /dev/null
+echo "deb [arch=amd64 signed-by=$DOCKER_KEYRING] $DOCKER_DOWNLOAD_LOCATION $LSBCS $DOCKER_VERSION" | tee "$DOCKER_SOURCES_LIST" > /dev/null
   
 section_split "apt-get update -y"
 apt-get update -y

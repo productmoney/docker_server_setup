@@ -3,13 +3,9 @@ GH_CONTENT="https://raw.githubusercontent.com/$ORGANIZATION"
 export DEBIAN_FRONTEND=noninteractive
 DEBIAN_FRONTEND=noninteractive
 
-function section_split() {
-  printf "\n----------------------------------------\n%s\n\n" "$1"
-}
-
-function section_split_plain() {
-  printf "\n----------------------------------------\n"
-}
+DIVIDER=$(seq -s= $(($COLUMNS-1))|tr -d '[:digit:]')
+function section_split() { printf "\n$DIVIDER\n%s\n\n" "$1" ; }
+function section_split_plain() { printf "\n$DIVIDER\n" ; }
 
 section_split "Welcome to docker server installer setup!"
 
