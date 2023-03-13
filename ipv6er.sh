@@ -332,11 +332,11 @@ fi
 echo "eval $(ssh-agent)"
 eval "$(ssh-agent)"
 
-section_split "Project Setup"
+section_split "$PROJECT_NAME Setup"
 
 echo "cd $HOME"
 cd "$HOME"
-if test -d "$PROdJECT_DIR"; then
+if test -d "$PROJECT_DIR"; then
   echo "echo $PROJECT_DIR already exists"
 else
   echo "git clone git@github.com:productmoney/$PROJECT_NAME.git"
