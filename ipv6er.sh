@@ -116,8 +116,8 @@ nvm run default --version
 echo "npm install pm2 -g"
 npm install pm2 -g
 
-section_split "apt autoremove"
-apt autoremove
+section_split "apt autoremove -y"
+apt autoremove -y
 
 echo "cd $HOME"
 cd "$HOME"
@@ -295,35 +295,28 @@ else
   git clone "git@github.com:productmoney/$PROJECT_NAME.git"
 fi
 
-echo "cd $HOME/$PROJECT_NAME"
-cd "$HOME/$PROJECT_NAME"
-
-LOGSD="/root/ipv6er/logs"
-echo "mkdir -p $HOME/$PROJECT_NAME/logs"
-mkdir -p "$HOME/$PROJECT_NAME/logs"
-echo "mkdir -p $HOME/$PROJECT_NAME/generated"
-mkdir -p "$HOME/$PROJECT_NAME/generated"
-echo "mkdir -p $HOME/$PROJECT_NAME/3proxy"
-mkdir -p "$HOME/$PROJECT_NAME/3proxy"
-echo "touch $LOGSD/3proxy.log"
-touch "$LOGSD/3proxy.log $LOGSD/whitelist.log $LOGSD/reporting.log $LOGSD/iptables.log"
-echo "touch $LOGSD/3proxy.log $LOGSD/whitelist.log $LOGSD/reporting.log $LOGSD/iptables.log"
-touch /root/ipv6er/generated/3proxy.cfg
-
-npm install
-
-if test -f "$ENV_FILE"; then
-  echo "$ENV_FILE already exists"
-else
-  section_split "Writing .env"
-  echo "DOPPLER_TOKEN=$DOPPLER_TOKEN"
-  echo "TZ=America/Denver"
-  cat > "$ENV_FILE" << EOL
+if test -d "$PROJECT_DIR"; then
+  echo "echo $PROJECT_DIR exists"
+  echo "git clone git@github.com:productmoney/$PROJECT_NAME.git"
+  git clone "git@github.com:productmoney/$PROJECT_NAME.git"
+  
+  npm install
+  
+  echo "cd $HOME/$PROJECT_NAME"
+  cd "$HOME/$PROJECT_NAME"
+  
+  if test -f "$ENV_FILE"; then
+    echo "$ENV_FILE already exists"
+  else
+    section_split "Writing .env"
+    echo "DOPPLER_TOKEN=$DOPPLER_TOKEN"
+    echo "TZ=America/Denver"
+    cat > "$ENV_FILE" << EOL
 DOPPLER_TOKEN=$DOPPLER_TOKEN
 TZ="America/Denver"
 export DOPPLER_TOKEN
 export TZ
 EOL
+    shutdown -r now
+  fi
 fi
-
-shutdown -r now
