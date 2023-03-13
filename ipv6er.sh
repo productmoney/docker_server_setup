@@ -245,11 +245,11 @@ else
   echo "What is your github auth token?"
   echo "(If you don't have one, can create at https://github.com/settings/tokens being sure to include the right permissions)"
   read -r GITHUB_AUTH_TOKEN
-  if [ -z "$GITHUB_AUTH_TOKEN" ]; thenr
+  if [ -z "$GITHUB_AUTH_TOKEN" ]; then
     echo "Error: no GITHUB_AUTH_TOKEN"
     exit 1
   fi
-
+  
   section_split "ssh-keygen -q -t rsa -N '' -f $SSH_ID_RSA -C \"$GITHUB_USERNAME\" <<<y 2>&1 >/dev/null"
   ssh-keygen -q -t rsa -N '' -f "$SSH_ID_RSA" -C "$GITHUB_USERNAME" <<<y 2>&1 >/dev/null
   echo "eval \$(ssh-agent -s)"
