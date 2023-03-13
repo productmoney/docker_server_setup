@@ -371,9 +371,13 @@ TZ="America/Denver"
 export DOPPLER_TOKEN
 export TZ
 EOL
-    section_split "doppler setup"
-    doppler setup
   fi
+  
+  section_split "doppler setup"
+  echo "$ENV_FILE"
+  source "$ENV_FILE"
+  echo "doppler setup"
+  doppler setup
   
   section_split "$PROJECT_NAME setup complete!"
   if [[ "no" == $(ask_yes_or_no "Reboot now?") ]]; then
