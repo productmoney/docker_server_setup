@@ -288,7 +288,7 @@ section_split "Cloning project"
 
 echo "cd $HOME"
 cd "$HOME"
-test -d "$PROJECT_DIR"; then
+if test -d "$PROJECT_DIR"; then
   echo "echo $PROJECT_DIR already exists"
 else
   echo "git clone git@github.com:productmoney/$PROJECT_NAME.git"
