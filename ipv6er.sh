@@ -83,7 +83,10 @@ else
   else
     section_split "Debian operating system detected"
   fi
-  rrings/docker-archive-keyring.gpg"
+  echo "KEYRING_DISTRO: ${KEYRING_DISTRO}"
+
+  GPG_LOCATION="https://download.docker.com/linux/$KEYRING_DISTRO/gpg"
+  DOCKER_KEYRING="/usr/share/keyrings/docker-archive-keyring.gpg"
   DOCKER_DOWNLOAD_LOCATION="https://download.docker.com/linux/$KEYRING_DISTRO"
   DOCKER_VERSION="stable"
   
