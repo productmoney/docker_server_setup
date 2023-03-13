@@ -237,7 +237,7 @@ if test -f "$SSH_ID_RSA"; then
   echo "$SSH_ID_RSA already exists"
 else
   HOSTNAME=$(hostname)
-  echo "Key will have the name: $HOSTNAME (from using command hostname)"
+  echo "Key will have the name: $HOSTNAME from using command hostname"
   
   echo "mkdir -p $SSH_DIR"
   mkdir -p "$SSH_DIR"
