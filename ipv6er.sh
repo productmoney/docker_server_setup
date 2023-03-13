@@ -4,6 +4,7 @@ export DEBIAN_FRONTEND=noninteractive
 DEBIAN_FRONTEND=noninteractive
 
 export PROJECT_NAME="ipv6er"
+export ENV_FILE="$HOME/$PROJECT_NAME/.env"
 
 export DIVIDER=$(seq -s= $(($COLUMNS-1))|tr -d '[:digit:]')
 function section_split() { printf "\n$DIVIDER\n%s\n\n" "$1" ; }
@@ -155,19 +156,16 @@ GITHUB_USERNAME='goban'
 # fi
 ORG_NAME="productmoney"
 
-echo "What is your github auth token?"
-echo "(If you don't have one, can create at https://github.com/settings/tokens being sure to include the right permissions)"
-read -r GH_AUTH_TOKEN
-if [ -z "$GH_AUTH_TOKEN" ]; then
-  echo "Error: no GH_AUTH_TOKEN"
-  exit 1
-fi
-
-echo "What is your doppler token?"
-read -r DOPPLER_TOKEN
-if [ -z "$DOPPLER_TOKEN" ]; then
-  echo "Error: no DOPPLER_TOKEN"
-  exit 1
+if test -f "$ENV_FILE"; then
+  echo "$ENV_FILE already exists"
+else
+  echo "$ENV_FILE does not exist"
+  echo "What is your doppler token?"
+  read -r DOPPLER_TOKEN
+  if [ -z "$DOPPLER_TOKEN" ]; then
+    echo "Error: no DOPPLER_TOKEN"
+    exit 1
+  fi
 fi
 
 # Doppler
@@ -189,20 +187,32 @@ fi
 HOSTNAME=$(hostname)
 echo "Key will have the name: $HOSTNAME (from using command hostname)"
 
-section_split "ssh-keygen -q -t rsa -N '' -f $SSH_ID_RSA -C \"$GITHUB_USERNAME\" <<<y 2>&1 >/dev/null"
-ssh-keygen -q -t rsa -N '' -f "$SSH_ID_RSA" -C "$GITHUB_USERNAME" <<<y 2>&1 >/dev/null
-echo "eval \$(ssh-agent -s)"
-eval "$(ssh-agent -s)"
-echo "ssh-add $SSH_ID_RSA"
-ssh-add "$SSH_ID_RSA"
-echo "pub=\$(cat $SSH_ID_RSA_PUB)"
-pub=$(cat "$SSH_ID_RSA_PUB")
-# shellcheck disable=SC2016
-echo "curl -H Authorization: token $GITHUB_AUTH_TOKEN -X POST -d {\"title\":\"$HOSTNAME\",\"key\":\"$pub\"} $GITHUB_KEYS"
-curl -H "Authorization: token $GITHUB_AUTH_TOKEN" -X POST -d "{\"title\":\"$HOSTNAME\",\"key\":\"$pub\"}" "$GITHUB_KEYS"
+if test -f "$SSH_ID_RSA"; then
+  echo "$SSH_ID_RSA already exists"
+else
+  echo "What is your github auth token?"
+  echo "(If you don't have one, can create at https://github.com/settings/tokens being sure to include the right permissions)"
+  read -r GH_AUTH_TOKEN
+  if [ -z "$GH_AUTH_TOKEN" ]; then
+    echo "Error: no GH_AUTH_TOKEN"
+    exit 1
+  fi
 
-section_split "echo 'StrictHostKeyChecking no' > $SSH_CONFIG"
-echo "StrictHostKeyChecking no " > "$SSH_CONFIG"
+  section_split "ssh-keygen -q -t rsa -N '' -f $SSH_ID_RSA -C \"$GITHUB_USERNAME\" <<<y 2>&1 >/dev/null"
+  ssh-keygen -q -t rsa -N '' -f "$SSH_ID_RSA" -C "$GITHUB_USERNAME" <<<y 2>&1 >/dev/null
+  echo "eval \$(ssh-agent -s)"
+  eval "$(ssh-agent -s)"
+  echo "ssh-add $SSH_ID_RSA"
+  ssh-add "$SSH_ID_RSA"
+  echo "pub=\$(cat $SSH_ID_RSA_PUB)"
+  pub=$(cat "$SSH_ID_RSA_PUB")
+  # shellcheck disable=SC2016
+  echo "curl -H Authorization: token $GITHUB_AUTH_TOKEN -X POST -d {\"title\":\"$HOSTNAME\",\"key\":\"$pub\"} $GITHUB_KEYS"
+  curl -H "Authorization: token $GITHUB_AUTH_TOKEN" -X POST -d "{\"title\":\"$HOSTNAME\",\"key\":\"$pub\"}" "$GITHUB_KEYS"
+
+  section_split "echo 'StrictHostKeyChecking no' > $SSH_CONFIG"
+  echo "StrictHostKeyChecking no " > "$SSH_CONFIG"
+fi
 
 mkdir -p ~/.config/git
 section_split "Writing ~/.config/git/.gitignore_global"
@@ -294,12 +304,18 @@ touch /root/ipv6er/generated/3proxy.cfg
 
 npm install
 
-section_split "Writing .env"
-cat > "$HOME/$PROJECT_NAME/.env" << EOL
-DOPPLER_TOKEN=$DOPPLER_TOKEN
-TZ="America/Denver"
-export DOPPLER_TOKEN
-export TZ
-EOL
+if test -f "$ENV_FILE"; then
+  echo "$ENV_FILE already exists"
+else
+  section_split "Writing .env"
+  echo "DOPPLER_TOKEN=$DOPPLER_TOKEN"
+  echo "TZ=America/Denver"
+  cat > "$ENV_FILE" << EOL
+  DOPPLER_TOKEN=$DOPPLER_TOKEN
+  TZ="America/Denver"
+  export DOPPLER_TOKEN
+  export TZ
+  EOL
+fi
 
 shutdown -r now
