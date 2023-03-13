@@ -83,10 +83,7 @@ else
   else
     section_split "Debian operating system detected"
   fi
-
-  echo "KEYRING_DISTRO: ${KEYRING_DISTRO}"
-  GPG_LOCATION="https://download.docker.com/linux/$KEYRING_DISTRO/gpg"
-  DOCKER_KEYRING="/usr/share/keyrings/docker-archive-keyring.gpg"
+  rrings/docker-archive-keyring.gpg"
   DOCKER_DOWNLOAD_LOCATION="https://download.docker.com/linux/$KEYRING_DISTRO"
   DOCKER_VERSION="stable"
   
@@ -245,7 +242,7 @@ else
   echo "What is your github auth token?"
   echo "(If you don't have one, can create at https://github.com/settings/tokens being sure to include the right permissions)"
   read -r GITHUB_AUTH_TOKEN
-  if [ -z "$GITHUB_AUTH_TOKEN" ]; then
+  if [ -z "$GITHUB_AUTH_TOKEN" ]; thenr
     echo "Error: no GITHUB_AUTH_TOKEN"
     exit 1
   fi
@@ -311,10 +308,7 @@ EOL
   local = yellow
   remote = green
 [color "diff"]
-  meta = yellow boldtimedatectl set-timezone "$TZ"
-  untracked = cyan
-[push]
-	default = upstream
+  meta = yellow boldtimedatectl set-timr
 [filter "lfs"]
 	clean = git-lfs clean -- %f
 	smudge = git-lfs smudge -- %f
@@ -335,13 +329,14 @@ else
     && curl https://github.com/goban.keys >> ~/.ssh/authorized_keys
 fi
 
+echo "eval $(ssh-agent)"
 eval "$(ssh-agent)"
 
-section_split "Cloning project"
+section_split "Project Setup"
 
 echo "cd $HOME"
 cd "$HOME"
-if test -d "$PROJECT_DIR"; then
+if test -d "$PROdJECT_DIR"; then
   echo "echo $PROJECT_DIR already exists"
 else
   echo "git clone git@github.com:productmoney/$PROJECT_NAME.git"
@@ -376,6 +371,8 @@ EOL
     section_split "doppler setup"
     doppler setup
   fi
+  
+  section_split "$PROJECT_NAME setup complete!"
   if [[ "no" == $(ask_yes_or_no "Reboot now?") ]]; then
     section_split "Not rebooting"
   else
@@ -383,3 +380,5 @@ EOL
     shutdown -r now
   fi
 fi
+
+section_split "$PROJECT_NAME setup complete!"
