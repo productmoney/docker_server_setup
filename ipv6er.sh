@@ -7,14 +7,34 @@ export PROJECT_NAME="ipv6er"
 export PROJECT_DIR="$HOME/$PROJECT_NAME"
 export ENV_FILE="$PROJECT_DIR/.env"
 
-export DIVIDER=$(seq -s= $(($COLUMNS-1))|tr -d '[:digit:]')
-function section_split() { printf "\n$DIVIDER\n%s\n\n" "$1" ; }
-function section_split_plain() { printf "\n$DIVIDER\n" ; }
+function section_split() { printf "\n$(seq -s= $(($COLUMNS-1))|tr -d '[:digit:]')\n%s\n\n" "$1" ; }
+function section_split_plain() { printf "\n$(seq -s= $(($COLUMNS-1))|tr -d '[:digit:]')\n" ; }
+
+function ask_yes_or_no() {
+  read -p "$1 ([y]es or [N]o): "
+  case $(echo $REPLY | tr '[A-Z]' '[a-z]') in
+    y|yes) echo "yes" ;;
+    *)     echo "no" ;;
+  esac
+}
 
 section_split "Welcome to $PROJECT_NAME installer setup!"
 
-sysctl -w vm.max_map_count=1677720
-timedatectl set-timezone America/Denver
+MAX_MAP_COUNT=1677720
+if grep -Rq "$MAX_MAP_COUNT" /proc/sys/vm/max_map_count; then
+  section_split "vm.max_map_count already written"
+else
+  section_split "sysctl -w vm.max_map_count=$MAX_MAP_COUNT"
+  sysctl -w vm.max_map_count=$MAX_MAP_COUNT
+fi
+
+export TZ="America/Denver"
+if grep -Rq "$TZ" /etc/timezone; then
+  section_split "Timezone already set"
+else
+  section_split "timedatectl set-timezone $TZ"
+  timedatectl set-timezone "$TZ"
+fi
 
 IP4=$(curl -4 -s icanhazip.com)
 section_split "IPV4 address: ${IP4}"
@@ -36,8 +56,7 @@ fi
 
 LIMITS_FILE="/etc/security/limits.conf"
 FILE_LIMIT="97816"
-
-if grep -Fxq "$FILE_LIMIT" "$LIMITS_FILE"; then
+if grep -Rq "$FILE_LIMIT" "$LIMITS_FILE"; then
   section_split "File limits already written"
 else
   section_split "Setting file limits"
@@ -289,13 +308,7 @@ EOL
   local = yellow
   remote = green
 [color "diff"]
-  meta = yellow bold
-  frag = magenta bold
-  old = red bold
-  new = green bold
-[color "status"]
-  added = yellow
-  changed = green
+  meta = yellow boldtimedatectl set-timezone "$TZ"
   untracked = cyan
 [push]
 	default = upstream
@@ -332,7 +345,12 @@ if test -d "$PROJECT_DIR"; then
   echo "cd $HOME/$PROJECT_NAME"
   cd "$HOME/$PROJECT_NAME"
   
-  npm install
+  if test -d "$PROJECT_DIR/node_modules"; then
+    echo "$PROJECT_DIR/node_modules already exists"
+  else
+    section_split "npm install"
+    npm install
+  fi
   
   if test -f "$ENV_FILE"; then
     echo "$ENV_FILE already exists"
@@ -346,7 +364,13 @@ TZ="America/Denver"
 export DOPPLER_TOKEN
 export TZ
 EOL
+    section_split "doppler setup"
     doppler setup
+  fi
+  if [[ "no" == $(ask_yes_or_no "Reboot now?") ]]; then
+    section_split "Not rebooting"
+  else
+    section_split "shutdown -r now"
     shutdown -r now
   fi
 fi
