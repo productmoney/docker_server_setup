@@ -5,7 +5,7 @@ DEBIAN_FRONTEND=noninteractive
 
 export PROJECT_NAME="ipv6er"
 
-DIVIDER=$(seq -s= $(($COLUMNS-1))|tr -d '[:digit:]')
+export DIVIDER=$(seq -s= $(($COLUMNS-1))|tr -d '[:digit:]')
 function section_split() { printf "\n$DIVIDER\n%s\n\n" "$1" ; }
 function section_split_plain() { printf "\n$DIVIDER\n" ; }
 
@@ -92,8 +92,12 @@ docker-compose --version
 section_split "nvm and node setup"
 echo "curl https://raw.githubusercontent.com/creationix/nvm/master/install.sh | bash"
 curl https://raw.githubusercontent.com/creationix/nvm/master/install.sh | bash 
-echo "source ~/.bashrc"
-source ~/.bashrc 
+echo "export NVM_DIR=$HOME/.nvm"
+export NVM_DIR="$HOME/.nvm"
+echo '[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"'  # This loads nvm
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+echo '[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"'
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 echo "nvm install 16"
 nvm install 16
 echo "nvm use 16"
