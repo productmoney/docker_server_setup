@@ -291,8 +291,8 @@ cd "$HOME"
 if test -d "$PROJECT_DIR"; then
   echo "echo $PROJECT_DIR already exists"
 else
-  echo "git clone https://github.com/productmoney/$PROJECT_NAME.git"
-  git clone "https://github.com/productmoney/$PROJECT_NAME.git"
+  echo "git clone git@github.com:productmoney/$PROJECT_NAME.git"
+  git clone "git@github.com:productmoney/$PROJECT_NAME.git"
 fi
 
 if test -d "$PROJECT_DIR"; then
