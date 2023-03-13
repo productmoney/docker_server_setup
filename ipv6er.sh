@@ -306,22 +306,20 @@ fi
 
 if test -d "$PROJECT_DIR"; then
   echo "echo $PROJECT_DIR exists"
-  echo "git clone git@github.com:productmoney/$PROJECT_NAME.git"
-  git clone "git@github.com:productmoney/$PROJECT_NAME.git"
+  
+  echo "sleep 1 && cd $HOME/$PROJECT_NAME"
+  sleep 1 && cd "$HOME/$PROJECT_NAME"
   
   npm install
-  
-  echo "cd $HOME/$PROJECT_NAME"
-  cd "$HOME/$PROJECT_NAME"
   
   if test -f "$ENV_FILE"; then
     echo "$ENV_FILE already exists"
   else
     section_split "Writing .env"
-    echo "DOPPLER_TOKEN=$DOPPLER_TOKEN"
+    echo "DOPPLER_TOKEN=\"$DOPPLER_TOKEN\""
     echo "TZ=America/Denver"
     cat > "$ENV_FILE" << EOL
-DOPPLER_TOKEN=$DOPPLER_TOKEN
+DOPPLER_TOKEN="$DOPPLER_TOKEN"
 TZ="America/Denver"
 export DOPPLER_TOKEN
 export TZ
