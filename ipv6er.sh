@@ -59,8 +59,8 @@ DOCKER_DOWNLOAD_LOCATION="https://download.docker.com/linux/$KEYRING_DISTRO"
 DOCKER_VERSION="stable"
 curl -fsSL "$GPG_LOCATION" | gpg --dearmor -o "$DOCKER_KEYRING"
 
-echo "deb \[arch=amd64 signed-by=$DOCKER_KEYRING] $DOCKER_DOWNLOAD_LOCATION $LSBCS $DOCKER_VERSION | tee $DOCKER_SOURCES_LIST > /dev/null"
-echo "deb [arch=amd64 signed-by=$DOCKER_KEYRING] $DOCKER_DOWNLOAD_LOCATION $LSBCS $DOCKER_VERSION" | tee "$DOCKER_SOURCES_LIST" > /dev/null
+echo "deb [arch=amd64 signed-by=$DOCKER_KEYRING] $DOCKER_DOWNLOAD_LOCATION $LSBCS $DOCKER_VERSION | tee $DOCKER_SOURCES_LIST > /dev/null"
+echo "deb [arch=amd64 signed-by=$DOCKER_KEYRING] $DOCKER_DOWNLOAD_LOCATION $LSBCS $DOCKER_VERSION"  | tee "$DOCKER_SOURCES_LIST" > /dev/null
   
 section_split "apt-get update -y"
 apt-get update -y
