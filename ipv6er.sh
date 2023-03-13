@@ -174,9 +174,6 @@ SSH_CONFIG="$SSH_DIR/config"
 GITCONFIG="$HOME/.gitconfig"
 GITHUB_KEYS="https://api.github.com/user/keys"
 
-echo "mkdir -p $SSH_DIR"
-mkdir -p "$SSH_DIR"
-
 section_split "auth setup"
 
 # echo "What is your github login email address?"
@@ -236,12 +233,15 @@ else
   bash <(curl -s "https://raw.githubusercontent.com/productmoney/docker_server_setup/main/monitors/gotop-setup.sh")
 fi
 
-HOSTNAME=$(hostname)
-echo "Key will have the name: $HOSTNAME (from using command hostname)"
-
 if test -f "$SSH_ID_RSA"; then
   echo "$SSH_ID_RSA already exists"
 else
+  HOSTNAME=$(hostname)
+  echo "Key will have the name: $HOSTNAME (from using command hostname)"
+  
+  echo "mkdir -p $SSH_DIR"
+  mkdir -p "$SSH_DIR"
+  
   echo "What is your github auth token?"
   echo "(If you don't have one, can create at https://github.com/settings/tokens being sure to include the right permissions)"
   read -r GITHUB_AUTH_TOKEN
