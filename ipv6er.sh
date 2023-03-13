@@ -114,7 +114,7 @@ section_split "Github setup"
 
 SSH_DIR="$HOME/.ssh"
 SSH_ID_RSA="$SSH_DIR/id_rsa"
-SSH_ID_RSA_PUB="$SSH If you don't have one, ask Andrew or David to make you one//api.github.com/user/keys"
+SSH_ID_RSA_PUB="$SSH_ID_RSA.pub"
 SSH_CONFIG="$SSH_DIR/config"
 GITCONFIG="$HOME/.gitconfig"
 GITHUB_KEYS="https://api.github.com/user/keys"
@@ -267,12 +267,32 @@ section_split "Cloning project"
 
 echo "cd $HOME"
 cd "$HOME"
-echo "git clone https://github.com/productmoney/$PROJECT_NAME.git"
-git clone "https://github.com/productmoney/$PROJECT_NAME.git"
+echo "git clone git@github.com:productmoney/$PROJECT_NAME.git"
+git clone "git@github.com:productmoney/$PROJECT_NAME.git"
 
-cat > "/root/$PROJECT_NAME/.env" << EOL
+echo "cd $HOME/$PROJECT_NAME"
+cd "$HOME/$PROJECT_NAME"
+
+LOGSD="/root/ipv6er/logs"
+echo "mkdir -p $HOME/$PROJECT_NAME/logs"
+mkdir -p "$HOME/$PROJECT_NAME/logs"
+echo "mkdir -p $HOME/$PROJECT_NAME/generated"
+mkdir -p "$HOME/$PROJECT_NAME/generated"
+echo "mkdir -p $HOME/$PROJECT_NAME/3proxy"
+mkdir -p "$HOME/$PROJECT_NAME/3proxy"
+echo "touch $LOGSD/3proxy.log"
+touch "$LOGSD/3proxy.log $LOGSD/whitelist.log $LOGSD/reporting.log $LOGSD/iptables.log"
+echo "touch $LOGSD/3proxy.log $LOGSD/whitelist.log $LOGSD/reporting.log $LOGSD/iptables.log"
+touch /root/ipv6er/generated/3proxy.cfg
+
+npm install
+
+section_split "Writing .env"
+cat > "$HOME/$PROJECT_NAME/.env" << EOL
 DOPPLER_TOKEN=$DOPPLER_TOKEN
 TZ="America/Denver"
 export DOPPLER_TOKEN
 export TZ
 EOL
+
+shutdown -r now
