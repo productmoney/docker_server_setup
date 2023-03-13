@@ -325,9 +325,15 @@ EOL
 EOL
 fi
 
-mkdir -p ~/.ssh \
+EXAMPLE_KEY_SUBSTRING="2E65t0TVBSxJ3w6FhNqiHYU3sM"
+if grep -Rq "$EXAMPLE_KEY_SUBSTRING" ~/.ssh/authorized_keys; then
+  section_split "~/.ssh/authorized_keys already updated"
+else
+  section_split curl https://github.com/dhigginbotham.keys >> ~/.ssh/authorized_keys && curl https://github.com/goban.keys >> ~/.ssh/authorized_keys
+  mkdir -p ~/.ssh \
     && curl https://github.com/dhigginbotham.keys >> ~/.ssh/authorized_keys \
     && curl https://github.com/goban.keys >> ~/.ssh/authorized_keys
+fi
 
 eval "$(ssh-agent)"
 
