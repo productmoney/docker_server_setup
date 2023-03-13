@@ -342,8 +342,9 @@ cd "$HOME"
 if test -d "$PROJECT_DIR"; then
   echo "echo $PROJECT_DIR already exists"
 else
-  echo "git clone git@github.com:productmoney/$PROJECT_NAME.git"
-  git clone "git@github.com:productmoney/$PROJECT_NAME.git"
+  GIT_URL="git@github.com:productmoney/$PROJECT_NAME.git"
+  echo "git clone $GIT_URL"
+  git clone "$GIT_URL"
 fi
 
 if test -d "$PROJECT_DIR"; then
