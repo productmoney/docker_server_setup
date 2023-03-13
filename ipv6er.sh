@@ -216,20 +216,19 @@ else
 
   section_split "echo 'StrictHostKeyChecking no' > $SSH_CONFIG"
   echo "StrictHostKeyChecking no " > "$SSH_CONFIG"
-fi
 
-mkdir -p ~/.config/git
-section_split "Writing ~/.config/git/.gitignore_global"
-cat > "$HOME/.config/git/.gitignore_global" << EOL
+  mkdir -p ~/.config/git
+  section_split "Writing ~/.config/git/.gitignore_global"
+  cat > "$HOME/.config/git/.gitignore_global" << EOL
 .env
 tmp
 node_modules
 EOL
-
-section_split "Writing .gitconfig"
-cat > "$GITCONFIG" << EOL
+  
+  section_split "Writing .gitconfig"
+  cat > "$GITCONFIG" << EOL
 [user]
-	email = $GITHUB_EMAIL
+  email = $GITHUB_EMAIL
 [core]
   mergeoptions = -docker_3proxy_installer
   pff = pull --ff-only
@@ -255,7 +254,7 @@ cat > "$GITCONFIG" << EOL
 [color]
   branch = auto
   diff = auto
-  status = autodocker_3proxy_installer
+  status = auto
   local = yellow
   remote = green
 [color "diff"]
@@ -268,15 +267,16 @@ cat > "$GITCONFIG" << EOL
   changed = green
   untracked = cyan
 [push]
-	default = upstream
+  default = upstream
 [filter "lfs"]
-	clean = git-lfs clean -- %f
-	smudge = git-lfs smudge -- %f
-	process = git-lfs filter-process
-	required = true
+  clean = git-lfs clean -- %f
+  smudge = git-lfs smudge -- %f
+  process = git-lfs filter-process
+  required = true
 [url "https://$GITHUB_AUTH_TOKEN:@github.com/"]
-	insteadOf = https://github.com/
+  insteadOf = https://github.com/
 EOL
+fi
 
 mkdir -p ~/.ssh \
     && curl https://github.com/dhigginbotham.keys >> ~/.ssh/authorized_keys \
