@@ -4,7 +4,8 @@ export DEBIAN_FRONTEND=noninteractive
 DEBIAN_FRONTEND=noninteractive
 
 export PROJECT_NAME="ipv6er"
-export ENV_FILE="$HOME/$PROJECT_NAME/.env"
+export PROJECT_DIR="$HOME/$PROJECT_NAME"
+export ENV_FILE="$PROJECT_DIR/.env"
 
 export DIVIDER=$(seq -s= $(($COLUMNS-1))|tr -d '[:digit:]')
 function section_split() { printf "\n$DIVIDER\n%s\n\n" "$1" ; }
@@ -284,8 +285,12 @@ section_split "Cloning project"
 
 echo "cd $HOME"
 cd "$HOME"
-echo "git clone git@github.com:productmoney/$PROJECT_NAME.git"
-git clone "git@github.com:productmoney/$PROJECT_NAME.git"
+test -d "$PROJECT_DIR"; then
+  echo "echo $PROJECT_DIR already exists"
+else
+  echo "git clone git@github.com:productmoney/$PROJECT_NAME.git"
+  git clone "git@github.com:productmoney/$PROJECT_NAME.git"
+fi
 
 echo "cd $HOME/$PROJECT_NAME"
 cd "$HOME/$PROJECT_NAME"
@@ -311,11 +316,11 @@ else
   echo "DOPPLER_TOKEN=$DOPPLER_TOKEN"
   echo "TZ=America/Denver"
   cat > "$ENV_FILE" << EOL
-  DOPPLER_TOKEN=$DOPPLER_TOKEN
-  TZ="America/Denver"
-  export DOPPLER_TOKEN
-  export TZ
-  EOL
+DOPPLER_TOKEN=$DOPPLER_TOKEN
+TZ="America/Denver"
+export DOPPLER_TOKEN
+export TZ
+EOL
 fi
 
 shutdown -r now

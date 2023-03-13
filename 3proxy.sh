@@ -124,7 +124,7 @@ echo "mkdir -p $AUTH_FOLDER"
 mkdir -p "$AUTH_FOLDER"
 
 if test -f "$DEFAULT_AUTH_FILE"; then
-
+  
   section_split "$DEFAULT_AUTH_FILE file already present."
   cat "$DEFAULT_AUTH_FILE"
 
