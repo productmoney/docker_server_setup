@@ -192,9 +192,9 @@ if test -f "$SSH_ID_RSA"; then
 else
   echo "What is your github auth token?"
   echo "(If you don't have one, can create at https://github.com/settings/tokens being sure to include the right permissions)"
-  read -r GH_AUTH_TOKEN
-  if [ -z "$GH_AUTH_TOKEN" ]; then
-    echo "Error: no GH_AUTH_TOKEN"
+  read -r GITHUB_AUTH_TOKEN
+  if [ -z "$GITHUB_AUTH_TOKEN" ]; then
+    echo "Error: no GITHUB_AUTH_TOKEN"
     exit 1
   fi
 
