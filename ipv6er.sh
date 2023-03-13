@@ -116,6 +116,9 @@ nvm run default --version
 echo "npm install pm2 -g"
 npm install pm2 -g
 
+section_split "apt autoremove"
+apt autoremove
+
 echo "cd $HOME"
 cd "$HOME"
 
