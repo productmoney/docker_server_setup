@@ -19,7 +19,7 @@ function ask_yes_or_no() {
 }
 
 if ! [ -x "$(command -v toilet)" ]; then
-  apt install toilet -y
+  apt install toilet -y --no-install-recommends -q
 fi
 toilet "$PROJECT_NAME Installer" -f future --gay
 
