@@ -18,7 +18,10 @@ function ask_yes_or_no() {
   esac
 }
 
-section_split "Welcome to $PROJECT_NAME installer setup!"
+if ! [ -x "$(command -v toilet)" ]; then
+  apt install toilet
+fi
+toilet "$PROJECT_NAME Installer" -f emboss2 --gay
 
 MAX_MAP_COUNT=1677720
 if grep -Rq "$MAX_MAP_COUNT" /proc/sys/vm/max_map_count; then
