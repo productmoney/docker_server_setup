@@ -19,7 +19,7 @@ function ask_yes_or_no() {
 }
 
 if ! [ -x "$(command -v toilet)" ]; then
-  apt install toilet
+  apt install toilet -y
 fi
 toilet "$PROJECT_NAME Installer" -f future --gay
 
@@ -127,7 +127,7 @@ else
   curl -L "$DOCKER_COMPOSE_LOCATION" -o "$DOCKER_COMPOSE_INSTALL_LOCATION"
   echo "chmod +x $DOCKER_COMPOSE_INSTALL_LOCATION"
   chmod +x "$DOCKER_COMPOSE_INSTALL_LOCATION"
-
+  
   section_split "docker-compose --version"
   docker-compose --version
 fi
