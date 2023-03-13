@@ -19,105 +19,122 @@ timedatectl set-timezone America/Denver
 IP4=$(curl -4 -s icanhazip.com)
 section_split "IPV4 address: ${IP4}"
 
-section_split "apt-get update"
-apt-get update
+if [ -x "$(command -v git)" ]; then
+  section_split "Pre-reqs already installed"
+else
+  section_split "Installing pre-reqs"
 
-section_split "apt-get upgrade -y"
-apt-get upgrade -y
-
-section_split "apt-get install -y --no-install-recommends curl jq ifupdown git ntp apt-transport-https ca-certificates dnsutils apt-transport-https gnupg lsb-release"
-apt-get install -y --no-install-recommends curl jq git ntp ifupdown apt-transport-https ca-certificates dnsutils apt-transport-https gnupg lsb-release
-
-section_split "Setting file limits"
+  echo "apt-get update"
+  apt-get update
+  
+  echo "apt-get upgrade -y"
+  apt-get upgrade -y
+  
+  section_split "apt-get install -y --no-install-recommends curl jq ifupdown git ntp apt-transport-https ca-certificates dnsutils apt-transport-https gnupg lsb-release"
+  apt-get install -y --no-install-recommends curl jq git ntp ifupdown apt-transport-https ca-certificates dnsutils apt-transport-https gnupg lsb-release
+fi
 
 LIMITS_FILE="/etc/security/limits.conf"
 FILE_LIMIT="97816"
 
-if grep -q "$FILE_LIMIT" "$LIMITS_FILE"; then
-  : # File limits already written
+if grep -Fxq "$FILE_LIMIT" "$LIMITS_FILE"; then
+  section_split "File limits already written"
 else
+  section_split "Setting file limits"
   echo "Appended to $LIMITS_FILE:"
   printf "* hard nofile %s\n* soft nofile %s\n" "$FILE_LIMIT" "$FILE_LIMIT" | sudo tee -a "$LIMITS_FILE"
 fi
 
-section_split "Setting up docker"
-
-DOCKER_SOURCES_LIST="/etc/apt/sources.list.d/docker.list"
-LSBCS=$(lsb_release -cs)
-echo "LSBCS: ${LSBCS}"
-
-KEYRING_DISTRO="debian"
-if grep "Ubuntu" "/etc/"*release*; then
-  KEYRING_DISTRO="ubuntu"
-  section_split "Ubuntu operating system detected"
+if [ -x "$(command -v git)" ]; then
+  section_split "Docker already installed"
 else
-  section_split "Debian operating system detected"
-fi
+  section_split "Setting up docker"
 
-echo "KEYRING_DISTRO: ${KEYRING_DISTRO}"
-GPG_LOCATION="https://download.docker.com/linux/$KEYRING_DISTRO/gpg"
-DOCKER_KEYRING="/usr/share/keyrings/docker-archive-keyring.gpg"
-DOCKER_DOWNLOAD_LOCATION="https://download.docker.com/linux/$KEYRING_DISTRO"
-DOCKER_VERSION="stable"
+  DOCKER_SOURCES_LIST="/etc/apt/sources.list.d/docker.list"
+  LSBCS=$(lsb_release -cs)
+  echo "LSBCS: ${LSBCS}"
 
-if test -f "$DOCKER_KEYRING"; then
-  echo "$DOCKER_KEYRING already exists"
-else
-  echo "$DOCKER_KEYRING does not exist"
-  echo "url -fsSL $GPG_LOCATION | gpg --dearmor -o $DOCKER_KEYRING"
-  curl -fsSL "$GPG_LOCATION" | gpg --dearmor -o "$DOCKER_KEYRING"
-fi
+  KEYRING_DISTRO="debian"
+  if grep "Ubuntu" "/etc/"*release*; then
+    KEYRING_DISTRO="ubuntu"
+    section_split "Ubuntu operating system detected"
+  else
+    section_split "Debian operating system detected"
+  fi
 
-echo "deb [arch=amd64 signed-by=$DOCKER_KEYRING] $DOCKER_DOWNLOAD_LOCATION $LSBCS $DOCKER_VERSION | tee $DOCKER_SOURCES_LIST > /dev/null"
-echo "deb [arch=amd64 signed-by=$DOCKER_KEYRING] $DOCKER_DOWNLOAD_LOCATION $LSBCS $DOCKER_VERSION"  | tee "$DOCKER_SOURCES_LIST" > /dev/null
+  echo "KEYRING_DISTRO: ${KEYRING_DISTRO}"
+  GPG_LOCATION="https://download.docker.com/linux/$KEYRING_DISTRO/gpg"
+  DOCKER_KEYRING="/usr/share/keyrings/docker-archive-keyring.gpg"
+  DOCKER_DOWNLOAD_LOCATION="https://download.docker.com/linux/$KEYRING_DISTRO"
+  DOCKER_VERSION="stable"
   
-section_split "apt-get update -y"
-apt-get update -y
+  if test -f "$DOCKER_KEYRING"; then
+    echo "$DOCKER_KEYRING already exists"
+  else
+    echo "$DOCKER_KEYRING does not exist"
+    echo "url -fsSL $GPG_LOCATION | gpg --dearmor -o $DOCKER_KEYRING"
+    curl -fsSL "$GPG_LOCATION" | gpg --dearmor -o "$DOCKER_KEYRING"
+  fi
 
-section_split "apt-get install -y --no-install-recommends docker-ce docker-ce-cli containerd.io"
-apt-get install -y --no-install-recommends docker-ce docker-ce-cli containerd.io
+  echo "deb [arch=amd64 signed-by=$DOCKER_KEYRING] $DOCKER_DOWNLOAD_LOCATION $LSBCS $DOCKER_VERSION | tee $DOCKER_SOURCES_LIST > /dev/null"
+  echo "deb [arch=amd64 signed-by=$DOCKER_KEYRING] $DOCKER_DOWNLOAD_LOCATION $LSBCS $DOCKER_VERSION"  | tee "$DOCKER_SOURCES_LIST" > /dev/null
+    
+  section_split "apt-get update -y"
+  apt-get update -y
 
-section_split "docker run hello-world"
-docker run hello-world
+  section_split "apt-get install -y --no-install-recommends docker-ce docker-ce-cli containerd.io"
+  apt-get install -y --no-install-recommends docker-ce docker-ce-cli containerd.io
 
-section_split "usermod -aG docker $USER"
-usermod -aG docker "$USER"
+  section_split "docker run hello-world"
+  docker run hello-world
 
-section_split "Setting up docker-compose"
+  section_split "usermod -aG docker $USER"
+  usermod -aG docker "$USER"
+fi
 
-UNS=$(uname -s)
-UNM=$(uname -m)
-DOCKER_COMPOSE_LOCATION="https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$UNS-$UNM"
-DOCKER_COMPOSE_INSTALL_LOCATION="/usr/local/bin/docker-compose"
-echo "curl -L $DOCKER_COMPOSE_LOCATION -o $DOCKER_COMPOSE_INSTALL_LOCATION"
-curl -L "$DOCKER_COMPOSE_LOCATION" -o "$DOCKER_COMPOSE_INSTALL_LOCATION"
-echo "chmod +x $DOCKER_COMPOSE_INSTALL_LOCATION"
-chmod +x "$DOCKER_COMPOSE_INSTALL_LOCATION"
+if [ -x "$(command -v docker-compose)" ]; then
+  section_split "docker-compose already installed"
+else
+  section_split "Setting up docker-compose"
 
-section_split "docker-compose --version"
-docker-compose --version
+  UNS=$(uname -s)
+  UNM=$(uname -m)
+  DOCKER_COMPOSE_LOCATION="https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$UNS-$UNM"
+  DOCKER_COMPOSE_INSTALL_LOCATION="/usr/local/bin/docker-compose"
+  echo "curl -L $DOCKER_COMPOSE_LOCATION -o $DOCKER_COMPOSE_INSTALL_LOCATION"
+  curl -L "$DOCKER_COMPOSE_LOCATION" -o "$DOCKER_COMPOSE_INSTALL_LOCATION"
+  echo "chmod +x $DOCKER_COMPOSE_INSTALL_LOCATION"
+  chmod +x "$DOCKER_COMPOSE_INSTALL_LOCATION"
+
+  section_split "docker-compose --version"
+  docker-compose --version
+fi
 
 # nvm
-section_split "nvm and node setup"
-if test -d "$NVM_DIR"; then
-  echo "nvm already installed"
+if [ -x "$(command -v npm)" ]; then
+  section_split "npm already installed"
 else
-  echo "curl https://raw.githubusercontent.com/creationix/nvm/master/install.sh | bash"
-  curl https://raw.githubusercontent.com/creationix/nvm/master/install.sh | bash 
-  echo "export NVM_DIR=$HOME/.nvm"
-  export NVM_DIR="$HOME/.nvm"
-  echo '[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"'  # This loads nvm
-  [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
-  echo '[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"'
-  [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
-  echo "nvm install 16"
-  nvm install 16
-  echo "nvm use 16"
-  nvm use 16
-  echo "nvm run default --version"
-  nvm run default --version
-  echo "npm install pm2 -g"
-  npm install pm2 -g
+  section_split "nvm and node setup"
+  if test -d "$NVM_DIR"; then
+    echo "nvm already installed"
+  else
+    echo "curl https://raw.githubusercontent.com/creationix/nvm/master/install.sh | bash"
+    curl https://raw.githubusercontent.com/creationix/nvm/master/install.sh | bash 
+    echo "export NVM_DIR=$HOME/.nvm"
+    export NVM_DIR="$HOME/.nvm"
+    echo '[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"'  # This loads nvm
+    [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+    echo '[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"'
+    [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+    echo "nvm install 16"
+    nvm install 16
+    echo "nvm use 16"
+    nvm use 16
+    echo "nvm run default --version"
+    nvm run default --version
+    echo "npm install pm2 -g"
+    npm install pm2 -g
+  fi
 fi
 
 section_split "apt autoremove -y"
@@ -176,13 +193,18 @@ else
   fi
 fi
 
-# Doppler
-echo "-sLf --retry 3 --tlsv1.2 --proto \"=https\" 'https://packages.doppler.com/public/cli/gpg.DE2A7741A397C129.key' | sudo apt-key add -"
-curl -sLf --retry 3 --tlsv1.2 --proto "=https" 'https://packages.doppler.com/public/cli/gpg.DE2A7741A397C129.key' | sudo apt-key add -
-echo "\"deb https://packages.doppler.com/public/cli/deb/debian any-version main\" | sudo tee /etc/apt/sources.list.d/doppler-cli.list"
-echo "deb https://packages.doppler.com/public/cli/deb/debian any-version main" | sudo tee /etc/apt/sources.list.d/doppler-cli.list
-echo "sudo apt-get update && sudo apt-get install doppler"
-sudo apt-get update && sudo apt-get install doppler
+if [ -x "$(command -v doppler)" ]; then
+  section_split "Doppler already installed"
+else
+  section_split "Setting up doppler"
+  # Doppler
+  echo "-sLf --retry 3 --tlsv1.2 --proto \"=https\" 'https://packages.doppler.com/public/cli/gpg.DE2A7741A397C129.key' | sudo apt-key add -"
+  curl -sLf --retry 3 --tlsv1.2 --proto "=https" 'https://packages.doppler.com/public/cli/gpg.DE2A7741A397C129.key' | sudo apt-key add -
+  echo "\"deb https://packages.doppler.com/public/cli/deb/debian any-version main\" | sudo tee /etc/apt/sources.list.d/doppler-cli.list"
+  echo "deb https://packages.doppler.com/public/cli/deb/debian any-version main" | sudo tee /etc/apt/sources.list.d/doppler-cli.list
+  echo "sudo apt-get update && sudo apt-get install doppler"
+  sudo apt-get update && sudo apt-get install doppler
+fi
 
 # Gotop
 if [ -x "$(command -v gotop)" ]; then
@@ -324,6 +346,7 @@ TZ="America/Denver"
 export DOPPLER_TOKEN
 export TZ
 EOL
+    doppler setup
     shutdown -r now
   fi
 fi
