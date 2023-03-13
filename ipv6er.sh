@@ -99,22 +99,26 @@ docker-compose --version
 
 # nvm
 section_split "nvm and node setup"
-echo "curl https://raw.githubusercontent.com/creationix/nvm/master/install.sh | bash"
-curl https://raw.githubusercontent.com/creationix/nvm/master/install.sh | bash 
-echo "export NVM_DIR=$HOME/.nvm"
-export NVM_DIR="$HOME/.nvm"
-echo '[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"'  # This loads nvm
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
-echo '[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"'
-[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
-echo "nvm install 16"
-nvm install 16
-echo "nvm use 16"
-nvm use 16
-echo "nvm run default --version"
-nvm run default --version
-echo "npm install pm2 -g"
-npm install pm2 -g
+if test -d "$NVM_DIR"; then
+  echo "nvm already installed"
+else
+  echo "curl https://raw.githubusercontent.com/creationix/nvm/master/install.sh | bash"
+  curl https://raw.githubusercontent.com/creationix/nvm/master/install.sh | bash 
+  echo "export NVM_DIR=$HOME/.nvm"
+  export NVM_DIR="$HOME/.nvm"
+  echo '[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"'  # This loads nvm
+  [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+  echo '[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"'
+  [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+  echo "nvm install 16"
+  nvm install 16
+  echo "nvm use 16"
+  nvm use 16
+  echo "nvm run default --version"
+  nvm run default --version
+  echo "npm install pm2 -g"
+  npm install pm2 -g
+fi
 
 section_split "apt autoremove -y"
 apt autoremove -y
@@ -213,7 +217,7 @@ else
   # shellcheck disable=SC2016
   echo "curl -H Authorization: token $GITHUB_AUTH_TOKEN -X POST -d {\"title\":\"$HOSTNAME\",\"key\":\"$pub\"} $GITHUB_KEYS"
   curl -H "Authorization: token $GITHUB_AUTH_TOKEN" -X POST -d "{\"title\":\"$HOSTNAME\",\"key\":\"$pub\"}" "$GITHUB_KEYS"
-
+  
   section_split "echo 'StrictHostKeyChecking no' > $SSH_CONFIG"
   echo "StrictHostKeyChecking no " > "$SSH_CONFIG"
 
@@ -228,9 +232,12 @@ EOL
   section_split "Writing .gitconfig"
   cat > "$GITCONFIG" << EOL
 [user]
-  email = $GITHUB_EMAIL
+	email = $GITHUB_EMAIL
 [core]
-  mergeoptions = -docker_3proxy_installer
+  mergeoptions = --no-commit
+  excludesfile = $HOME/.config/git/.gitignore_global
+  autocrlf = input
+[alias]
   pff = pull --ff-only
   quick = log -1 --format='%h - %an - %ad - %s' --date=local --name-status
   squash = merge --squash
@@ -255,6 +262,8 @@ EOL
   branch = auto
   diff = auto
   status = auto
+[color "branch"]
+  current = yellow reverse
   local = yellow
   remote = green
 [color "diff"]
@@ -267,14 +276,14 @@ EOL
   changed = green
   untracked = cyan
 [push]
-  default = upstream
+	default = upstream
 [filter "lfs"]
-  clean = git-lfs clean -- %f
-  smudge = git-lfs smudge -- %f
-  process = git-lfs filter-process
-  required = true
+	clean = git-lfs clean -- %f
+	smudge = git-lfs smudge -- %f
+	process = git-lfs filter-process
+	required = true
 [url "https://$GITHUB_AUTH_TOKEN:@github.com/"]
-  insteadOf = https://github.com/
+	insteadOf = https://github.com/
 EOL
 fi
 
