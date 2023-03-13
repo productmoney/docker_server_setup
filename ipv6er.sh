@@ -307,8 +307,8 @@ fi
 if test -d "$PROJECT_DIR"; then
   echo "echo $PROJECT_DIR exists"
   
-  echo "sleep 1 && cd $HOME/$PROJECT_NAME"
-  sleep 1 && cd "$HOME/$PROJECT_NAME"
+  echo "cd $HOME/$PROJECT_NAME"
+  cd "$HOME/$PROJECT_NAME"
   
   npm install
   
