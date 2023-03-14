@@ -380,13 +380,62 @@ EOL
   echo "doppler setup"
   doppler setup
   
-  section_split "$PROJECT_NAME setup complete!"
+  LOGS_DIR="$HOME/$PROJECT_NAME/logs"
+  mkdir -p "$LOGS_DIR"
+  touch "$LOGS_DIR/whitelist.log"
+  touch "$LOGS_DIR/autoboot.log"
+  touch "$LOGS_DIR/3proxy.log"
+  touch "$LOGS_DIR/iptables.log"
+  touch "$LOGS_DIR/ipaddr.log"
+  GEN_DIR="$HOME/$PROJECT_NAME/generated"
+  mkdir -p "$GEN_DIR"
+  touch "$GEN_DIR/3proxy.cfg"
+fi
+
+PROJECT_NAME="3proxyer"
+section_split "$PROJECT_NAME Setup"
+
+echo "cd $HOME"
+cd "$HOME"
+if test -d "$PROJECT_DIR"; then
+  echo "echo $PROJECT_DIR already exists"
+else
+  GIT_URL="git@github.com:productmoney/$PROJECT_NAME.git"
+  echo "git clone $GIT_URL"
+  git clone "$GIT_URL"
+fi
+
+if test -d "$PROJECT_DIR"; then
+  echo "echo $PROJECT_DIR exists"
+  
+  echo "cd $HOME/$PROJECT_NAME"
+  cd "$HOME/$PROJECT_NAME"
+  
+  if test -f "$ENV_FILE"; then
+    echo "$ENV_FILE already exists"
+  else
+    section_split "Writing .env"
+    echo "DOPPLER_TOKEN=\"$DOPPLER_TOKEN\""
+    echo "TZ=America/Denver"
+    cat > "$ENV_FILE" << EOL
+DOPPLER_TOKEN="$DOPPLER_TOKEN"
+TZ="America/Denver"
+export DOPPLER_TOKEN
+export TZ
+EOL
+  fi
+  
+  section_split "doppler setup"
+  echo "$ENV_FILE"
+  source "$ENV_FILE"
+  echo "doppler setup"
+  doppler setup
+fi
+
+section_split "$PROJECT_NAME setup complete!"
   if [[ "no" == $(ask_yes_or_no "Reboot now?") ]]; then
     section_split "Not rebooting"
   else
     section_split "shutdown -r now"
     shutdown -r now
   fi
-fi
-
-section_split "$PROJECT_NAME setup complete!"
