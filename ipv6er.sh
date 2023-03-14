@@ -393,6 +393,7 @@ EOL
 fi
 
 PROJECT_NAME="3proxyer"
+export PROJECT_DIR="$HOME/$PROJECT_NAME"
 section_split "$PROJECT_NAME Setup"
 
 echo "cd $HOME"
