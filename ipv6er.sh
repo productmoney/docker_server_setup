@@ -380,9 +380,10 @@ EOL
   echo "doppler setup"
   doppler setup
   
-  LOGS_DIR="$HOME/$PROJECT_NAME/logs"
+  LOGS_DIR="/root/logs"
   mkdir -p "$LOGS_DIR"
   touch "$LOGS_DIR/whitelist.log"
+  touch "$LOGS_DIR/hourly.log"
   touch "$LOGS_DIR/autoboot.log"
   touch "$LOGS_DIR/3proxy.log"
   touch "$LOGS_DIR/iptables.log"
@@ -432,6 +433,8 @@ EOL
   echo "doppler setup"
   doppler setup
 fi
+
+ufw allow 6669
 
 section_split "$PROJECT_NAME setup complete!"
   if [[ "no" == $(ask_yes_or_no "Reboot now?") ]]; then
