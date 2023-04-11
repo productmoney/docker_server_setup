@@ -42,20 +42,20 @@ fi
 IP4=$(curl -4 -s icanhazip.com)
 section_split "IPV4 address: ${IP4}"
 
-if [ -x "$(command -v git)" ]; then
-  section_split "Pre-reqs already installed"
-else
-  section_split "Installing pre-reqs"
+# if [ -x "$(command -v ifupdown)" ]; then
+#   section_split "Pre-reqs already installed"
+# else
+section_split "Installing pre-reqs"
 
-  echo "apt-get update"
-  apt-get update
-  
-  echo "apt-get upgrade -y"
-  apt-get upgrade -y
-  
-  section_split "apt-get install -y --no-install-recommends curl jq ifupdown git ntp apt-transport-https ca-certificates dnsutils apt-transport-https gnupg lsb-release"
-  apt-get install -y --no-install-recommends curl jq git ntp ifupdown apt-transport-https ca-certificates dnsutils apt-transport-https gnupg lsb-release
-fi
+echo "apt-get update"
+apt-get update
+
+echo "apt-get upgrade -y"
+apt-get upgrade -y
+
+section_split "apt-get install -y --no-install-recommends curl jq ifupdown git ntp apt-transport-https ca-certificates dnsutils apt-transport-https gnupg lsb-release"
+apt-get install -y --no-install-recommends curl jq git ntp ifupdown apt-transport-https ca-certificates dnsutils apt-transport-https gnupg lsb-release
+# fi
 
 LIMITS_FILE="/etc/security/limits.conf"
 FILE_LIMIT="97816"
@@ -75,7 +75,7 @@ else
   DOCKER_SOURCES_LIST="/etc/apt/sources.list.d/docker.list"
   LSBCS=$(lsb_release -cs)
   echo "LSBCS: ${LSBCS}"
-
+  
   KEYRING_DISTRO="debian"
   if grep "Ubuntu" "/etc/"*release*; then
     KEYRING_DISTRO="ubuntu"
@@ -310,8 +310,6 @@ EOL
   current = yellow reverse
   local = yellow
   remote = green
-[color "diff"]
-  meta = yellow boldtimedatectl set-timr
 [filter "lfs"]
 	clean = git-lfs clean -- %f
 	smudge = git-lfs smudge -- %f
