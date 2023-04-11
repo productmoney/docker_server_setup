@@ -67,7 +67,7 @@ else
   printf "* hard nofile %s\n* soft nofile %s\n" "$FILE_LIMIT" "$FILE_LIMIT" | sudo tee -a "$LIMITS_FILE"
 fi
 
-if [ -x "$(command -v git)" ]; then
+if [ -x "$(command -v docker)" ]; then
   section_split "Docker already installed"
 else
   section_split "Setting up docker"
